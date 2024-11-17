@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.xidian.meetingroom.mapper.NotificationMapper">
+    <resultMap id="NotificationResultMap" type="Notification">
+        <id property="notificationId" column="notification_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="type" column="type"/>
+        <result property="content" column="content"/>
+        <result property="isRead" column="is_read"/>
+        <result property="createdTime" column="created_time"/>
+    </resultMap>
+
+    <select id="selectNotificationById" resultMap="NotificationResultMap">
+        SELECT * FROM Notification WHERE notification_id = #{notificationId}
+    </select>
+
+    <!-- Additional CRUD operations -->
+</mapper>

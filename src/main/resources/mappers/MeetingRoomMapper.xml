@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.xidian.meetingroom.mapper.MeetingRoomMapper">
+    <resultMap id="MeetingRoomResultMap" type="MeetingRoom">
+        <id property="meetingRoomId" column="meeting_room_id"/>
+        <result property="name" column="name"/>
+        <result property="roomNumber" column="room_number"/>
+        <result property="capacity" column="capacity"/>
+        <result property="area" column="area"/>
+        <result property="photoUrl" column="photo_url"/>
+        <result property="description" column="description"/>
+        <result property="createdTime" column="created_time"/>
+        <result property="updatedTime" column="updated_time"/>
+    </resultMap>
+
+    <select id="selectMeetingRoomById" resultMap="MeetingRoomResultMap">
+        SELECT * FROM MeetingRoom WHERE meeting_room_id = #{meetingRoomId}
+    </select>
+
+    <insert id="insertMeetingRoom" parameterType="MeetingRoom">
+        INSERT INTO MeetingRoom (
+            name, 
+            room_number, 
+            capacity, 
+            area, 
+            photo_url, 
+            description
+        ) VALUES (
+            #{name}, 
+            #{roomNumber}, 
+            #{capacity}, 
+            #{area}, 
+            #{photoUrl}, 
+            #{description}
+        )
+    </insert>
+
+    <!-- Additional CRUD operations -->
+</mapper>

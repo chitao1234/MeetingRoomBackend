@@ -2,7 +2,7 @@
 
 -- changeset chi:1
 CREATE TABLE MeetingRoom (
-    meeting_room_id INT NOT NULL,
+    meeting_room_id INT NOT NULL AUTO_INCREMENT,
     name VARCHAR(100) NOT NULL,
     room_number VARCHAR(10) NOT NULL,
     capacity INT NOT NULL,
@@ -17,7 +17,7 @@ CREATE TABLE MeetingRoom (
 
 -- changeset chi:2
 CREATE TABLE User (
-    user_id INT NOT NULL,
+    user_id INT NOT NULL AUTO_INCREMENT,
     username VARCHAR(50) NOT NULL,
     password VARCHAR(100) NOT NULL,
     email VARCHAR(100) NULL,
@@ -31,7 +31,7 @@ CREATE TABLE User (
 
 -- changeset chi:3
 CREATE TABLE Log (
-    log_id INT NOT NULL,
+    log_id INT NOT NULL AUTO_INCREMENT,
     user_id INT NOT NULL,
     operation_type VARCHAR(50) NOT NULL,
     operation_details TEXT NOT NULL,
@@ -57,7 +57,7 @@ CREATE TABLE Notification (
 
 -- changeset chi:5
 CREATE TABLE Reservation (
-    reservation_id INT NOT NULL,
+    reservation_id INT NOT NULL AUTO_INCREMENT,
     user_id INT NOT NULL,
     meeting_room_id INT NOT NULL,
     meeting_date DATE NOT NULL,
