@@ -20,5 +20,63 @@
         SELECT * FROM Reservation WHERE reservation_id = #{reservationId}
     </select>
 
-    <!-- Additional CRUD operations -->
+    <select id="selectReservationsByUserId" resultMap="ReservationResultMap">
+        SELECT * FROM Reservation WHERE user_id = #{userId}
+        ORDER BY meeting_date DESC, start_time DESC
+    </select>
+
+    <select id="selectReservationsByMeetingRoomId" resultMap="ReservationResultMap">
+        SELECT * FROM Reservation WHERE meeting_room_id = #{meetingRoomId}
+        ORDER BY meeting_date DESC, start_time DESC
+    </select>
+
+    <select id="selectReservationsByDateRange" resultMap="ReservationResultMap">
+        SELECT * FROM Reservation 
+        WHERE meeting_room_id = #{meetingRoomId}
+        AND meeting_date BETWEEN #{startDate} AND #{endDate}
+        ORDER BY meeting_date, start_time
+    </select>
+
+    <insert id="insertReservation" parameterType="Reservation">
+        INSERT INTO Reservation (
+            user_id,
+            meeting_room_id,
+            meeting_date,
+            start_time,
+            end_time,
+            participant_count,
+            meeting_subject,
+            status,
+            created_time
+        ) VALUES (
+            #{userId},
+            #{meetingRoomId},
+            #{meetingDate},
+            #{startTime},
+            #{endTime},
+            #{participantCount},
+            #{meetingSubject},
+            #{status},
+            #{createdTime}
+        )
+    </insert>
+
+    <update id="updateReservation" parameterType="Reservation">
+        UPDATE Reservation 
+        <set>
+            <if test="meetingDate != null">meeting_date = #{meetingDate},</if>
+            <if test="startTime != null">start_time = #{startTime},</if>
+            <if test="endTime != null">end_time = #{endTime},</if>
+            <if test="participantCount != 0">participant_count = #{participantCount},</if>
+            <if test="meetingSubject != null">meeting_subject = #{meetingSubject},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="rejectionReason != null">rejection_reason = #{rejectionReason},</if>
+            <if test="approvalTime != null">approval_time = #{approvalTime}</if>
+        </set>
+        WHERE reservation_id = #{reservationId}
+    </update>
+
+    <delete id="deleteReservation">
+        DELETE FROM Reservation WHERE reservation_id = #{reservationId}
+    </delete>
 </mapper>

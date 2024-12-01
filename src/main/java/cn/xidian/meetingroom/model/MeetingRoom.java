@@ -6,10 +6,10 @@ import java.util.Date;
 
 @Data
 public class MeetingRoom {
-    private int meetingRoomId;
+    private Long meetingRoomId;
     private String name;
     private String roomNumber;
-    private int capacity;
+    private Integer capacity;
     private BigDecimal area;
     private String photoUrl;
     private String description;

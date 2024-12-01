@@ -17,6 +17,10 @@
         SELECT * FROM MeetingRoom WHERE meeting_room_id = #{meetingRoomId}
     </select>
 
+    <select id="selectAllMeetingRooms" resultMap="MeetingRoomResultMap">
+        SELECT * FROM MeetingRoom ORDER BY meeting_room_id
+    </select>
+
     <insert id="insertMeetingRoom" parameterType="MeetingRoom">
         INSERT INTO MeetingRoom (
             name, 
@@ -24,16 +28,36 @@
             capacity, 
             area, 
             photo_url, 
-            description
+            description,
+            created_time,
+            updated_time
         ) VALUES (
             #{name}, 
             #{roomNumber}, 
             #{capacity}, 
             #{area}, 
             #{photoUrl}, 
-            #{description}
+            #{description},
+            #{createdTime},
+            #{updatedTime}
         )
     </insert>
 
-    <!-- Additional CRUD operations -->
+    <update id="updateMeetingRoom" parameterType="MeetingRoom">
+        UPDATE MeetingRoom 
+        <set>
+            <if test="name != null">name = #{name},</if>
+            <if test="roomNumber != null">room_number = #{roomNumber},</if>
+            <if test="capacity != null">capacity = #{capacity},</if>
+            <if test="area != null">area = #{area},</if>
+            <if test="photoUrl != null">photo_url = #{photoUrl},</if>
+            <if test="description != null">description = #{description},</if>
+            updated_time = #{updatedTime}
+        </set>
+        WHERE meeting_room_id = #{meetingRoomId}
+    </update>
+
+    <delete id="deleteMeetingRoom">
+        DELETE FROM MeetingRoom WHERE meeting_room_id = #{meetingRoomId}
+    </delete>
 </mapper>

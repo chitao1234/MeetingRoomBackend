@@ -5,8 +5,8 @@ import java.util.Date;
 
 @Data
 public class Log {
-    private int logId;
-    private int userId;
+    private Long logId;
+    private Long userId;
     private String operationType;
     private String operationDetails;
     private Date createdTime;

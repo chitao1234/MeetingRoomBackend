@@ -5,13 +5,13 @@ import java.util.Date;
 
 @Data
 public class Reservation {
-    private int reservationId;
-    private int userId;
-    private int meetingRoomId;
+    private Long reservationId;
+    private Long userId;
+    private Long meetingRoomId;
     private Date meetingDate;
     private Date startTime;
     private Date endTime;
-    private int participantCount;
+    private Integer participantCount;
     private String meetingSubject;
     private String status;
     private Date createdTime;

@@ -14,5 +14,41 @@
         SELECT * FROM Log WHERE log_id = #{logId}
     </select>
 
-    <!-- Additional CRUD operations -->
+    <select id="selectLogsByUserId" resultMap="LogResultMap">
+        SELECT * FROM Log 
+        WHERE user_id = #{userId}
+        ORDER BY created_time DESC
+    </select>
+
+    <select id="selectLogsByDateRange" resultMap="LogResultMap">
+        SELECT * FROM Log 
+        WHERE created_time BETWEEN #{startDate} AND #{endDate}
+        ORDER BY created_time DESC
+    </select>
+
+    <select id="selectLogsByOperationType" resultMap="LogResultMap">
+        SELECT * FROM Log 
+        WHERE operation_type = #{operationType}
+        ORDER BY created_time DESC
+    </select>
+
+    <insert id="insertLog" parameterType="Log">
+        INSERT INTO Log (
+            user_id,
+            operation_type,
+            operation_details,
+            ip_address,
+            created_time
+        ) VALUES (
+            #{userId},
+            #{operationType},
+            #{operationDetails},
+            #{ipAddress},
+            #{createdTime}
+        )
+    </insert>
+
+    <delete id="deleteLogsBefore">
+        DELETE FROM Log WHERE created_time < #{date}
+    </delete>
 </mapper>
