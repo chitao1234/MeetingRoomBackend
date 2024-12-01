@@ -24,6 +24,18 @@
         SELECT * FROM User ORDER BY user_id
     </select>
 
+    <select id="selectUsersByRole" resultMap="UserResultMap">
+        SELECT * FROM User WHERE role = #{role}
+    </select>
+
+    <select id="existsByUsername" resultType="boolean">
+        SELECT COUNT(*) > 0 FROM User WHERE username = #{username}
+    </select>
+
+    <select id="existsByEmail" resultType="boolean">
+        SELECT COUNT(*) > 0 FROM User WHERE email = #{email}
+    </select>
+
     <insert id="insertUser" parameterType="User">
         INSERT INTO User (
             username,
@@ -56,7 +68,7 @@
 
     <update id="updateLastLoginTime">
         UPDATE User 
-        SET last_login_time = CURRENT_TIMESTAMP
+        SET last_login_time = #{lastLoginTime}
         WHERE user_id = #{userId}
     </update>
 

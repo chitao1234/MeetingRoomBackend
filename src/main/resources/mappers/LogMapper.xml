@@ -49,6 +49,8 @@
     </insert>
 
     <delete id="deleteLogsBefore">
-        DELETE FROM Log WHERE created_time < #{date}
+        <![CDATA[
+            DELETE FROM Log WHERE created_time < #{date}
+        ]]>
     </delete>
 </mapper>

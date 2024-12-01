@@ -3,6 +3,10 @@ package cn.xidian.meetingroom.service.impl;
 import cn.xidian.meetingroom.mapper.UserMapper;
 import cn.xidian.meetingroom.model.User;
 import cn.xidian.meetingroom.service.UserService;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Date;
@@ -11,9 +15,25 @@ import java.util.Date;
 public class UserServiceImpl implements UserService {
     
     private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserMapper userMapper) {
+    public UserServiceImpl(UserMapper userMapper, PasswordEncoder passwordEncoder) {
         this.userMapper = userMapper;
+        this.passwordEncoder = passwordEncoder;
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userMapper.selectUserByUsername(username);
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found with username: " + username);
+        }
+
+        return org.springframework.security.core.userdetails.User
+                .withUsername(user.getUsername())
+                .password(user.getPassword())
+                .roles(user.getRole())
+                .build();
     }
 
     @Override
@@ -33,11 +53,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User createUser(User user) {
-        // Set default values
+        if (userMapper.existsByUsername(user.getUsername())) {
+            throw new IllegalArgumentException("Username already exists");
+        }
+        if (user.getEmail() != null && userMapper.existsByEmail(user.getEmail())) {
+            throw new IllegalArgumentException("Email already exists");
+        }
+
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setCreatedTime(new Date());
-        // You might want to add password hashing here
-        // user.setPassword(passwordEncoder.encode(user.getPassword()));
-        
         userMapper.insertUser(user);
         return user;
     }
@@ -49,26 +73,11 @@ public class UserServiceImpl implements UserService {
             return null;
         }
 
-        User updateUser = new User();
-        updateUser.setUserId(userId);
-        updateUser.setCreatedTime(existingUser.getCreatedTime());
-        updateUser.setPassword(existingUser.getPassword()); // Don't update password in basic update
-        
-        if (user.getUsername() != null) {
-            updateUser.setUsername(user.getUsername());
-        }
-        if (user.getEmail() != null) {
-            updateUser.setEmail(user.getEmail());
-        }
-        if (user.getPhone() != null) {
-            updateUser.setPhone(user.getPhone());
-        }
-        if (user.getRole() != null) {
-            updateUser.setRole(user.getRole());
-        }
-        
-        userMapper.updateUser(updateUser);
-        return userMapper.selectUserById(userId);
+        user.setUserId(userId);
+        user.setPassword(existingUser.getPassword());
+        user.setCreatedTime(existingUser.getCreatedTime());
+        userMapper.updateUser(user);
+        return user;
     }
 
     @Override
@@ -78,6 +87,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateLastLoginTime(Long userId) {
-        userMapper.updateLastLoginTime(userId);
+        userMapper.updateLastLoginTime(userId, new Date());
     }
 } 
