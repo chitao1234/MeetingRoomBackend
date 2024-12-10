@@ -1,17 +1,36 @@
 package cn.xidian.meetingroom.mapper;
 
 import cn.xidian.meetingroom.model.Notification;
-import org.apache.ibatis.annotations.Mapper;
+import cn.xidian.meetingroom.model.NotificationExample;
 import java.util.List;
+import org.apache.ibatis.annotations.Param;
 
-@Mapper
 public interface NotificationMapper {
-    Notification selectNotificationById(Long notificationId);
-    List<Notification> selectNotificationsByUserId(Long userId);
-    List<Notification> selectUnreadNotificationsByUserId(Long userId);
-    void insertNotification(Notification notification);
-    void updateNotification(Notification notification);
-    void deleteNotification(Long notificationId);
-    void markAsRead(Long notificationId);
-    void markAllAsRead(Long userId);
+    long countByExample(NotificationExample example);
+
+    int deleteByExample(NotificationExample example);
+
+    int deleteByPrimaryKey(Integer notificationId);
+
+    int insert(Notification row);
+
+    int insertSelective(Notification row);
+
+    List<Notification> selectByExampleWithBLOBs(NotificationExample example);
+
+    List<Notification> selectByExample(NotificationExample example);
+
+    Notification selectByPrimaryKey(Integer notificationId);
+
+    int updateByExampleSelective(@Param("row") Notification row, @Param("example") NotificationExample example);
+
+    int updateByExampleWithBLOBs(@Param("row") Notification row, @Param("example") NotificationExample example);
+
+    int updateByExample(@Param("row") Notification row, @Param("example") NotificationExample example);
+
+    int updateByPrimaryKeySelective(Notification row);
+
+    int updateByPrimaryKeyWithBLOBs(Notification row);
+
+    int updateByPrimaryKey(Notification row);
 }

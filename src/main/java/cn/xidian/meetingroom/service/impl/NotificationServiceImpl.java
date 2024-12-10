@@ -2,10 +2,11 @@ package cn.xidian.meetingroom.service.impl;
 
 import cn.xidian.meetingroom.mapper.NotificationMapper;
 import cn.xidian.meetingroom.model.Notification;
+import cn.xidian.meetingroom.model.NotificationExample;
 import cn.xidian.meetingroom.service.NotificationService;
 import org.springframework.stereotype.Service;
 import java.util.List;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Service
 public class NotificationServiceImpl implements NotificationService {
@@ -17,45 +18,64 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public Notification getNotificationById(Long notificationId) {
-        return notificationMapper.selectNotificationById(notificationId);
+    public Notification getNotificationById(Integer notificationId) {
+        return notificationMapper.selectByPrimaryKey(notificationId);
     }
 
     @Override
-    public List<Notification> getNotificationsByUserId(Long userId) {
-        return notificationMapper.selectNotificationsByUserId(userId);
+    public List<Notification> getNotificationsByUserId(Integer userId) {
+        NotificationExample example = new NotificationExample();
+        example.createCriteria().andUserIdEqualTo(userId);
+        return notificationMapper.selectByExample(example);
     }
 
     @Override
-    public List<Notification> getUnreadNotifications(Long userId) {
-        return notificationMapper.selectUnreadNotificationsByUserId(userId);
+    public List<Notification> getUnreadNotifications(Integer userId) {
+        NotificationExample example = new NotificationExample();
+        example.createCriteria()
+            .andUserIdEqualTo(userId.intValue())
+            .andIsReadEqualTo(false);
+        return notificationMapper.selectByExample(example);
     }
 
     @Override
     public Notification createNotification(Notification notification) {
-        notification.setCreatedTime(new Date());
-        notification.setRead(false);
-        notificationMapper.insertNotification(notification);
+        notification.setCreatedTime(LocalDateTime.now());
+        notification.setIsRead(false);
+        notificationMapper.insert(notification);
         return notification;
     }
 
     @Override
-    public void markAsRead(Long notificationId) {
-        notificationMapper.markAsRead(notificationId);
+    public void markAsRead(Integer notificationId) {
+        Notification notification = new Notification();
+        notification.setNotificationId(notificationId);
+        notification.setIsRead(true);
+        notification.setUpdatedTime(LocalDateTime.now());
+        notificationMapper.updateByPrimaryKeySelective(notification);
     }
 
     @Override
-    public void markAllAsRead(Long userId) {
-        notificationMapper.markAllAsRead(userId);
+    public void markAllAsRead(Integer userId) {
+        NotificationExample example = new NotificationExample();
+        example.createCriteria()
+            .andUserIdEqualTo(userId.intValue())
+            .andIsReadEqualTo(false);
+        
+        Notification notification = new Notification();
+        notification.setIsRead(true);
+        notification.setUpdatedTime(LocalDateTime.now());
+        
+        notificationMapper.updateByExampleSelective(notification, example);
     }
 
     @Override
-    public void deleteNotification(Long notificationId) {
-        notificationMapper.deleteNotification(notificationId);
+    public void deleteNotification(Integer notificationId) {
+        notificationMapper.deleteByPrimaryKey(notificationId);
     }
 
     // Utility method to create different types of notifications
-    public void createSystemNotification(Long userId, String content) {
+    public void createSystemNotification(Integer userId, String content) {
         Notification notification = new Notification();
         notification.setUserId(userId);
         notification.setType("SYSTEM");
@@ -63,7 +83,7 @@ public class NotificationServiceImpl implements NotificationService {
         createNotification(notification);
     }
 
-    public void createReservationNotification(Long userId, String content) {
+    public void createReservationNotification(Integer userId, String content) {
         Notification notification = new Notification();
         notification.setUserId(userId);
         notification.setType("RESERVATION");
@@ -71,7 +91,7 @@ public class NotificationServiceImpl implements NotificationService {
         createNotification(notification);
     }
 
-    public void createMeetingRoomNotification(Long userId, String content) {
+    public void createMeetingRoomNotification(Integer userId, String content) {
         Notification notification = new Notification();
         notification.setUserId(userId);
         notification.setType("MEETING_ROOM");

@@ -2,10 +2,12 @@ package cn.xidian.meetingroom.service.impl;
 
 import cn.xidian.meetingroom.mapper.LogMapper;
 import cn.xidian.meetingroom.model.Log;
+import cn.xidian.meetingroom.model.LogExample;
+import cn.xidian.meetingroom.model.LogWithBLOBs;
 import cn.xidian.meetingroom.service.LogService;
 import org.springframework.stereotype.Service;
 import java.util.List;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Calendar;
 
 @Service
@@ -18,42 +20,51 @@ public class LogServiceImpl implements LogService {
     }
 
     @Override
-    public Log getLogById(Long logId) {
-        return logMapper.selectLogById(logId);
+    public LogWithBLOBs getLogById(Integer logId) {
+        return logMapper.selectByPrimaryKey(logId);
     }
 
     @Override
-    public List<Log> getLogsByUserId(Long userId) {
-        return logMapper.selectLogsByUserId(userId);
+    public List<LogWithBLOBs> getLogsByUserId(Integer userId) {
+        LogExample example = new LogExample();
+        example.createCriteria().andUserIdEqualTo(userId);
+        return logMapper.selectByExampleWithBLOBs(example);
     }
 
     @Override
-    public List<Log> getLogsByDateRange(Date startDate, Date endDate) {
-        return logMapper.selectLogsByDateRange(startDate, endDate);
+    public List<LogWithBLOBs> getLogsByDateRange(LocalDateTime startDate, LocalDateTime endDate) {
+        LogExample example = new LogExample();
+        example.createCriteria().andCreatedTimeBetween(startDate, endDate);
+        return logMapper.selectByExampleWithBLOBs(example);
     }
 
     @Override
-    public List<Log> getLogsByOperationType(String operationType) {
-        return logMapper.selectLogsByOperationType(operationType);
+    public List<LogWithBLOBs> getLogsByOperationType(String operationType) {
+        LogExample example = new LogExample();
+        example.createCriteria().andOperationTypeEqualTo(operationType);
+        return logMapper.selectByExampleWithBLOBs(example);
     }
 
     @Override
-    public Log createLog(Long userId, String operationType, String operationDetails, byte[] ipAddress) {
-        Log log = new Log();
+    public LogWithBLOBs createLog(Integer userId, String operationType, String operationDetails, byte[] ipAddress) {
+        LogWithBLOBs log = new LogWithBLOBs();
         log.setUserId(userId);
         log.setOperationType(operationType);
         log.setOperationDetails(operationDetails);
         log.setIpAddress(ipAddress);
-        log.setCreatedTime(new Date());
+        log.setCreatedTime(LocalDateTime.now());
         
-        logMapper.insertLog(log);
+        logMapper.insert(log);
         return log;
     }
 
     @Override
     public void deleteOldLogs(int daysToKeep) {
-        Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.DAY_OF_YEAR, -daysToKeep);
-        logMapper.deleteLogsBefore(cal.getTime());
+        LocalDateTime cutoffDate = LocalDateTime.now().minusDays(daysToKeep);
+        
+        LogExample example = new LogExample();
+        example.createCriteria().andCreatedTimeLessThan(cutoffDate);
+        
+        logMapper.deleteByExample(example);
     }
 } 

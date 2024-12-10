@@ -18,7 +18,7 @@ public class NotificationController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Notification> getNotification(@PathVariable("id") Long notificationId) {
+    public ResponseEntity<Notification> getNotification(@PathVariable("id") Integer notificationId) {
         Notification notification = notificationService.getNotificationById(notificationId);
         if (notification == null) {
             return ResponseEntity.notFound().build();
@@ -27,12 +27,12 @@ public class NotificationController {
     }
 
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<Notification>> getUserNotifications(@PathVariable Long userId) {
+    public ResponseEntity<List<Notification>> getUserNotifications(@PathVariable Integer userId) {
         return ResponseEntity.ok(notificationService.getNotificationsByUserId(userId));
     }
 
     @GetMapping("/user/{userId}/unread")
-    public ResponseEntity<List<Notification>> getUnreadNotifications(@PathVariable Long userId) {
+    public ResponseEntity<List<Notification>> getUnreadNotifications(@PathVariable Integer userId) {
         return ResponseEntity.ok(notificationService.getUnreadNotifications(userId));
     }
 
@@ -43,19 +43,19 @@ public class NotificationController {
     }
 
     @PutMapping("/{id}/read")
-    public ResponseEntity<Void> markAsRead(@PathVariable("id") Long notificationId) {
+    public ResponseEntity<Void> markAsRead(@PathVariable("id") Integer notificationId) {
         notificationService.markAsRead(notificationId);
         return ResponseEntity.ok().build();
     }
 
     @PutMapping("/user/{userId}/read-all")
-    public ResponseEntity<Void> markAllAsRead(@PathVariable Long userId) {
+    public ResponseEntity<Void> markAllAsRead(@PathVariable Integer userId) {
         notificationService.markAllAsRead(userId);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteNotification(@PathVariable("id") Long notificationId) {
+    public ResponseEntity<Void> deleteNotification(@PathVariable("id") Integer notificationId) {
         notificationService.deleteNotification(notificationId);
         return ResponseEntity.noContent().build();
     }

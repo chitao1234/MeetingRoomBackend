@@ -1,12 +1,13 @@
 package cn.xidian.meetingroom.service;
 
-import cn.xidian.meetingroom.model.MeetingRoom;
+import cn.xidian.meetingroom.model.MeetingRoomWithBLOBs;
+
 import java.util.List;
 
 public interface MeetingRoomService {
-    MeetingRoom getMeetingRoomById(Long meetingRoomId);
-    MeetingRoom createMeetingRoom(MeetingRoom meetingRoom);
-    List<MeetingRoom> getAllMeetingRooms();
-    MeetingRoom updateMeetingRoom(Long meetingRoomId, MeetingRoom meetingRoom);
-    void deleteMeetingRoom(Long meetingRoomId);
+    MeetingRoomWithBLOBs getMeetingRoomById(Integer meetingRoomId);
+    MeetingRoomWithBLOBs createMeetingRoom(MeetingRoomWithBLOBs meetingRoom);
+    List<MeetingRoomWithBLOBs> getAllMeetingRooms();
+    MeetingRoomWithBLOBs updateMeetingRoom(Integer meetingRoomId, MeetingRoomWithBLOBs meetingRoom);
+    void deleteMeetingRoom(Integer meetingRoomId);
 } 

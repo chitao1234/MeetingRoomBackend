@@ -1,14 +1,45 @@
 package cn.xidian.meetingroom.model;
 
-import lombok.Data;
-import java.util.Date;
+import java.time.LocalDateTime;
 
-@Data
 public class Log {
-    private Long logId;
-    private Long userId;
+    private Integer logId;
+
+    private Integer userId;
+
     private String operationType;
-    private String operationDetails;
-    private Date createdTime;
-    private byte[] ipAddress;
+
+    private LocalDateTime createdTime;
+
+    public Integer getLogId() {
+        return logId;
+    }
+
+    public void setLogId(Integer logId) {
+        this.logId = logId;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
+
+    public String getOperationType() {
+        return operationType;
+    }
+
+    public void setOperationType(String operationType) {
+        this.operationType = operationType == null ? null : operationType.trim();
+    }
+
+    public LocalDateTime getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(LocalDateTime createdTime) {
+        this.createdTime = createdTime;
+    }
 }

@@ -2,9 +2,13 @@ package cn.xidian.meetingroom.service.impl;
 
 import cn.xidian.meetingroom.mapper.ReservationMapper;
 import cn.xidian.meetingroom.model.Reservation;
+import cn.xidian.meetingroom.model.ReservationExample;
+import cn.xidian.meetingroom.model.ReservationWithBLOBs;
 import cn.xidian.meetingroom.service.ReservationService;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Service
@@ -17,99 +21,78 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public Reservation getReservationById(Long reservationId) {
-        return reservationMapper.selectReservationById(reservationId);
+    public ReservationWithBLOBs getReservationById(Integer reservationId) {
+        return reservationMapper.selectByPrimaryKey(reservationId);
     }
 
     @Override
-    public List<Reservation> getReservationsByUserId(Long userId) {
-        return reservationMapper.selectReservationsByUserId(userId);
+    public List<ReservationWithBLOBs> getReservationsByUserId(Integer userId) {
+        ReservationExample example = new ReservationExample();
+        example.createCriteria().andUserIdEqualTo(userId);
+        return reservationMapper.selectByExampleWithBLOBs(example);
     }
 
     @Override
-    public List<Reservation> getReservationsByMeetingRoomId(Long meetingRoomId) {
-        return reservationMapper.selectReservationsByMeetingRoomId(meetingRoomId);
+    public List<ReservationWithBLOBs> getReservationsByMeetingRoomId(Integer meetingRoomId) {
+        ReservationExample example = new ReservationExample();
+        example.createCriteria().andMeetingRoomIdEqualTo(meetingRoomId);
+        return reservationMapper.selectByExampleWithBLOBs(example);
     }
 
     @Override
-    public List<Reservation> getReservationsByDateRange(Long meetingRoomId, Date startDate, Date endDate) {
-        return reservationMapper.selectReservationsByDateRange(meetingRoomId, startDate, endDate);
+    public List<ReservationWithBLOBs> getReservationsByDateRange(Integer meetingRoomId, LocalDate startDate, LocalDate endDate) {
+        ReservationExample example = new ReservationExample();
+        example.createCriteria()
+            .andMeetingRoomIdEqualTo(meetingRoomId)
+            .andMeetingDateBetween(startDate, endDate);
+        return reservationMapper.selectByExampleWithBLOBs(example);
     }
 
     @Override
-    public Reservation createReservation(Reservation reservation) {
+    public ReservationWithBLOBs createReservation(ReservationWithBLOBs reservation) {
         reservation.setStatus("PENDING");
-        reservation.setCreatedTime(new Date());
-        reservationMapper.insertReservation(reservation);
+        reservation.setCreatedTime(LocalDateTime.now());
+        reservationMapper.insert(reservation);
         return reservation;
     }
 
     @Override
-    public Reservation updateReservation(Long reservationId, Reservation reservation) {
-        Reservation existingReservation = reservationMapper.selectReservationById(reservationId);
+    public ReservationWithBLOBs updateReservation(Integer reservationId, ReservationWithBLOBs reservation) {
+        Reservation existingReservation = reservationMapper.selectByPrimaryKey(reservationId);
         if (existingReservation == null) {
             return null;
         }
         
-        Reservation updateReservation = new Reservation();
-        updateReservation.setReservationId(reservationId);
-        updateReservation.setCreatedTime(existingReservation.getCreatedTime());
+        reservation.setReservationId(reservationId);
+        reservation.setCreatedTime(existingReservation.getCreatedTime());
+        reservationMapper.updateByPrimaryKeySelective(reservation);
         
-        if (reservation.getMeetingDate() != null) {
-            updateReservation.setMeetingDate(reservation.getMeetingDate());
-        }
-        if (reservation.getStartTime() != null) {
-            updateReservation.setStartTime(reservation.getStartTime());
-        }
-        if (reservation.getEndTime() != null) {
-            updateReservation.setEndTime(reservation.getEndTime());
-        }
-        if (reservation.getParticipantCount() != null) {
-            updateReservation.setParticipantCount(reservation.getParticipantCount());
-        }
-        if (reservation.getMeetingSubject() != null) {
-            updateReservation.setMeetingSubject(reservation.getMeetingSubject());
-        }
-        if (reservation.getStatus() != null) {
-            updateReservation.setStatus(reservation.getStatus());
-        }
-        if (reservation.getRejectionReason() != null) {
-            updateReservation.setRejectionReason(reservation.getRejectionReason());
-        }
-        
-        reservationMapper.updateReservation(updateReservation);
-        return reservationMapper.selectReservationById(reservationId);
+        return reservationMapper.selectByPrimaryKey(reservationId);
     }
 
     @Override
-    public void deleteReservation(Long reservationId) {
-        reservationMapper.deleteReservation(reservationId);
+    public void deleteReservation(Integer reservationId) {
+        reservationMapper.deleteByPrimaryKey(reservationId);
     }
 
     @Override
-    public Reservation approveReservation(Long reservationId) {
-        Reservation reservation = reservationMapper.selectReservationById(reservationId);
-        if (reservation == null) {
-            return null;
-        }
-        
+    public ReservationWithBLOBs approveReservation(Integer reservationId) {
+        ReservationWithBLOBs reservation = new ReservationWithBLOBs();
+        reservation.setReservationId(reservationId);
         reservation.setStatus("APPROVED");
-        reservation.setApprovalTime(new Date());
-        reservationMapper.updateReservation(reservation);
-        return reservation;
+        reservation.setApprovalTime(LocalDateTime.now());
+        reservationMapper.updateByPrimaryKeySelective(reservation);
+        return reservationMapper.selectByPrimaryKey(reservationId);
     }
 
     @Override
-    public Reservation rejectReservation(Long reservationId, String rejectionReason) {
-        Reservation reservation = reservationMapper.selectReservationById(reservationId);
-        if (reservation == null) {
-            return null;
-        }
-        
+    public ReservationWithBLOBs rejectReservation(Integer reservationId, String rejectionReason) {
+        ReservationWithBLOBs reservation = new ReservationWithBLOBs();
+        reservation.setReservationId(reservationId);
         reservation.setStatus("REJECTED");
         reservation.setRejectionReason(rejectionReason);
-        reservation.setApprovalTime(new Date());
-        reservationMapper.updateReservation(reservation);
-        return reservation;
+        reservation.setApprovalTime(LocalDateTime.now());
+        reservationMapper.updateByPrimaryKeySelective(reservation);
+        return reservationMapper.selectByPrimaryKey(reservationId);
     }
 } 

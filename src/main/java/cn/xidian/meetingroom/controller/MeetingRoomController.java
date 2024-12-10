@@ -1,6 +1,6 @@
 package cn.xidian.meetingroom.controller;
 
-import cn.xidian.meetingroom.model.MeetingRoom;
+import cn.xidian.meetingroom.model.MeetingRoomWithBLOBs;
 import cn.xidian.meetingroom.service.MeetingRoomService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,14 +18,14 @@ public class MeetingRoomController {
     }
 
     @GetMapping
-    public ResponseEntity<List<MeetingRoom>> getAllMeetingRooms() {
-        List<MeetingRoom> meetingRooms = meetingRoomService.getAllMeetingRooms();
+    public ResponseEntity<List<MeetingRoomWithBLOBs>> getAllMeetingRooms() {
+        List<MeetingRoomWithBLOBs> meetingRooms = meetingRoomService.getAllMeetingRooms();
         return ResponseEntity.ok(meetingRooms);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<MeetingRoom> getMeetingRoom(@PathVariable("id") Long meetingRoomId) {
-        MeetingRoom meetingRoom = meetingRoomService.getMeetingRoomById(meetingRoomId);
+    public ResponseEntity<MeetingRoomWithBLOBs> getMeetingRoom(@PathVariable("id") Integer meetingRoomId) {
+        MeetingRoomWithBLOBs meetingRoom = meetingRoomService.getMeetingRoomById(meetingRoomId);
         if (meetingRoom == null) {
             return ResponseEntity.notFound().build();
         }
@@ -33,16 +33,16 @@ public class MeetingRoomController {
     }
 
     @PostMapping
-    public ResponseEntity<MeetingRoom> createMeetingRoom(@RequestBody MeetingRoom meetingRoom) {
-        MeetingRoom createdRoom = meetingRoomService.createMeetingRoom(meetingRoom);
+    public ResponseEntity<MeetingRoomWithBLOBs> createMeetingRoom(@RequestBody MeetingRoomWithBLOBs meetingRoom) {
+        MeetingRoomWithBLOBs createdRoom = meetingRoomService.createMeetingRoom(meetingRoom);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdRoom);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<MeetingRoom> updateMeetingRoom(
-            @PathVariable("id") Long meetingRoomId,
-            @RequestBody MeetingRoom meetingRoom) {
-        MeetingRoom updatedRoom = meetingRoomService.updateMeetingRoom(meetingRoomId, meetingRoom);
+    public ResponseEntity<MeetingRoomWithBLOBs> updateMeetingRoom(
+            @PathVariable("id") Integer meetingRoomId,
+            @RequestBody MeetingRoomWithBLOBs meetingRoom) {
+        MeetingRoomWithBLOBs updatedRoom = meetingRoomService.updateMeetingRoom(meetingRoomId, meetingRoom);
         if (updatedRoom == null) {
             return ResponseEntity.notFound().build();
         }
@@ -50,7 +50,7 @@ public class MeetingRoomController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteMeetingRoom(@PathVariable("id") Long meetingRoomId) {
+    public ResponseEntity<Void> deleteMeetingRoom(@PathVariable("id") Integer meetingRoomId) {
         meetingRoomService.deleteMeetingRoom(meetingRoomId);
         return ResponseEntity.noContent().build();
     }
