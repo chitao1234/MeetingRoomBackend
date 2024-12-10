@@ -11,6 +11,7 @@ public class User {
     private String email;
     private String phone;
     private String role;
-    private Date createdTime;
     private Date lastLoginTime;
+    private Date createdTime;
+    private Date updatedTime;
 }

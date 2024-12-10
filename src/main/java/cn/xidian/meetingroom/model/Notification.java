@@ -11,4 +11,5 @@ public class Notification {
     private String content;
     private boolean isRead;
     private Date createdTime;
+    private Date updatedTime;
 }

@@ -15,6 +15,7 @@ public class Reservation {
     private String meetingSubject;
     private String status;
     private Date createdTime;
+    private Date updatedTime;
     private String rejectionReason;
     private Date approvalTime;
 }
