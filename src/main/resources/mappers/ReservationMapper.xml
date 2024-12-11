@@ -5,9 +5,8 @@
     <id column="reservation_id" jdbcType="INTEGER" property="reservationId" />
     <result column="user_id" jdbcType="INTEGER" property="userId" />
     <result column="meeting_room_id" jdbcType="INTEGER" property="meetingRoomId" />
-    <result column="meeting_date" jdbcType="DATE" property="meetingDate" />
-    <result column="start_time" jdbcType="TIME" property="startTime" />
-    <result column="end_time" jdbcType="TIME" property="endTime" />
+    <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
     <result column="participant_count" jdbcType="INTEGER" property="participantCount" />
     <result column="status" jdbcType="VARCHAR" property="status" />
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
@@ -77,7 +76,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    reservation_id, user_id, meeting_room_id, meeting_date, start_time, end_time, participant_count, 
+    reservation_id, user_id, meeting_room_id, start_time, end_time, participant_count, 
     status, created_time, updated_time, approval_time
   </sql>
   <sql id="Blob_Column_List">
@@ -135,15 +134,15 @@
     <selectKey keyProperty="reservationId" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into Reservation (user_id, meeting_room_id, meeting_date, 
-      start_time, end_time, participant_count, 
-      status, created_time, updated_time, 
-      approval_time, meeting_subject, rejection_reason
+    insert into Reservation (user_id, meeting_room_id, start_time, 
+      end_time, participant_count, status, 
+      created_time, updated_time, approval_time, 
+      meeting_subject, rejection_reason
       )
-    values (#{userId,jdbcType=INTEGER}, #{meetingRoomId,jdbcType=INTEGER}, #{meetingDate,jdbcType=DATE}, 
-      #{startTime,jdbcType=TIME}, #{endTime,jdbcType=TIME}, #{participantCount,jdbcType=INTEGER}, 
-      #{status,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP}, 
-      #{approvalTime,jdbcType=TIMESTAMP}, #{meetingSubject,jdbcType=LONGVARCHAR}, #{rejectionReason,jdbcType=LONGVARCHAR}
+    values (#{userId,jdbcType=INTEGER}, #{meetingRoomId,jdbcType=INTEGER}, #{startTime,jdbcType=TIMESTAMP}, 
+      #{endTime,jdbcType=TIMESTAMP}, #{participantCount,jdbcType=INTEGER}, #{status,jdbcType=VARCHAR}, 
+      #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP}, #{approvalTime,jdbcType=TIMESTAMP}, 
+      #{meetingSubject,jdbcType=LONGVARCHAR}, #{rejectionReason,jdbcType=LONGVARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="cn.xidian.meetingroom.model.ReservationWithBLOBs">
@@ -157,9 +156,6 @@
       </if>
       <if test="meetingRoomId != null">
         meeting_room_id,
-      </if>
-      <if test="meetingDate != null">
-        meeting_date,
       </if>
       <if test="startTime != null">
         start_time,
@@ -196,14 +192,11 @@
       <if test="meetingRoomId != null">
         #{meetingRoomId,jdbcType=INTEGER},
       </if>
-      <if test="meetingDate != null">
-        #{meetingDate,jdbcType=DATE},
-      </if>
       <if test="startTime != null">
-        #{startTime,jdbcType=TIME},
+        #{startTime,jdbcType=TIMESTAMP},
       </if>
       <if test="endTime != null">
-        #{endTime,jdbcType=TIME},
+        #{endTime,jdbcType=TIMESTAMP},
       </if>
       <if test="participantCount != null">
         #{participantCount,jdbcType=INTEGER},
@@ -246,14 +239,11 @@
       <if test="row.meetingRoomId != null">
         meeting_room_id = #{row.meetingRoomId,jdbcType=INTEGER},
       </if>
-      <if test="row.meetingDate != null">
-        meeting_date = #{row.meetingDate,jdbcType=DATE},
-      </if>
       <if test="row.startTime != null">
-        start_time = #{row.startTime,jdbcType=TIME},
+        start_time = #{row.startTime,jdbcType=TIMESTAMP},
       </if>
       <if test="row.endTime != null">
-        end_time = #{row.endTime,jdbcType=TIME},
+        end_time = #{row.endTime,jdbcType=TIMESTAMP},
       </if>
       <if test="row.participantCount != null">
         participant_count = #{row.participantCount,jdbcType=INTEGER},
@@ -286,9 +276,8 @@
     set reservation_id = #{row.reservationId,jdbcType=INTEGER},
       user_id = #{row.userId,jdbcType=INTEGER},
       meeting_room_id = #{row.meetingRoomId,jdbcType=INTEGER},
-      meeting_date = #{row.meetingDate,jdbcType=DATE},
-      start_time = #{row.startTime,jdbcType=TIME},
-      end_time = #{row.endTime,jdbcType=TIME},
+      start_time = #{row.startTime,jdbcType=TIMESTAMP},
+      end_time = #{row.endTime,jdbcType=TIMESTAMP},
       participant_count = #{row.participantCount,jdbcType=INTEGER},
       status = #{row.status,jdbcType=VARCHAR},
       created_time = #{row.createdTime,jdbcType=TIMESTAMP},
@@ -305,9 +294,8 @@
     set reservation_id = #{row.reservationId,jdbcType=INTEGER},
       user_id = #{row.userId,jdbcType=INTEGER},
       meeting_room_id = #{row.meetingRoomId,jdbcType=INTEGER},
-      meeting_date = #{row.meetingDate,jdbcType=DATE},
-      start_time = #{row.startTime,jdbcType=TIME},
-      end_time = #{row.endTime,jdbcType=TIME},
+      start_time = #{row.startTime,jdbcType=TIMESTAMP},
+      end_time = #{row.endTime,jdbcType=TIMESTAMP},
       participant_count = #{row.participantCount,jdbcType=INTEGER},
       status = #{row.status,jdbcType=VARCHAR},
       created_time = #{row.createdTime,jdbcType=TIMESTAMP},
@@ -326,14 +314,11 @@
       <if test="meetingRoomId != null">
         meeting_room_id = #{meetingRoomId,jdbcType=INTEGER},
       </if>
-      <if test="meetingDate != null">
-        meeting_date = #{meetingDate,jdbcType=DATE},
-      </if>
       <if test="startTime != null">
-        start_time = #{startTime,jdbcType=TIME},
+        start_time = #{startTime,jdbcType=TIMESTAMP},
       </if>
       <if test="endTime != null">
-        end_time = #{endTime,jdbcType=TIME},
+        end_time = #{endTime,jdbcType=TIMESTAMP},
       </if>
       <if test="participantCount != null">
         participant_count = #{participantCount,jdbcType=INTEGER},
@@ -363,9 +348,8 @@
     update Reservation
     set user_id = #{userId,jdbcType=INTEGER},
       meeting_room_id = #{meetingRoomId,jdbcType=INTEGER},
-      meeting_date = #{meetingDate,jdbcType=DATE},
-      start_time = #{startTime,jdbcType=TIME},
-      end_time = #{endTime,jdbcType=TIME},
+      start_time = #{startTime,jdbcType=TIMESTAMP},
+      end_time = #{endTime,jdbcType=TIMESTAMP},
       participant_count = #{participantCount,jdbcType=INTEGER},
       status = #{status,jdbcType=VARCHAR},
       created_time = #{createdTime,jdbcType=TIMESTAMP},
@@ -379,9 +363,8 @@
     update Reservation
     set user_id = #{userId,jdbcType=INTEGER},
       meeting_room_id = #{meetingRoomId,jdbcType=INTEGER},
-      meeting_date = #{meetingDate,jdbcType=DATE},
-      start_time = #{startTime,jdbcType=TIME},
-      end_time = #{endTime,jdbcType=TIME},
+      start_time = #{startTime,jdbcType=TIMESTAMP},
+      end_time = #{endTime,jdbcType=TIMESTAMP},
       participant_count = #{participantCount,jdbcType=INTEGER},
       status = #{status,jdbcType=VARCHAR},
       created_time = #{createdTime,jdbcType=TIMESTAMP},
@@ -389,82 +372,4 @@
       approval_time = #{approvalTime,jdbcType=TIMESTAMP}
     where reservation_id = #{reservationId,jdbcType=INTEGER}
   </update>
-    <resultMap id="ReservationResultMap" type="Reservation">
-        <id column="reservation_id" property="reservationId" />
-        <result column="user_id" property="userId" />
-        <result column="meeting_room_id" property="meetingRoomId" />
-        <result column="meeting_date" property="meetingDate" />
-        <result column="start_time" property="startTime" />
-        <result column="end_time" property="endTime" />
-        <result column="participant_count" property="participantCount" />
-        <result column="meeting_subject" property="meetingSubject" />
-        <result column="status" property="status" />
-        <result column="created_time" property="createdTime" />
-        <result column="rejection_reason" property="rejectionReason" />
-        <result column="approval_time" property="approvalTime" />
-    </resultMap>
-
-    <select id="selectReservationById" resultMap="ReservationResultMap">
-        SELECT * FROM Reservation WHERE reservation_id = #{reservationId}
-    </select>
-
-    <select id="selectReservationsByUserId" resultMap="ReservationResultMap">
-        SELECT * FROM Reservation WHERE user_id = #{userId}
-        ORDER BY meeting_date DESC, start_time DESC
-    </select>
-
-    <select id="selectReservationsByMeetingRoomId" resultMap="ReservationResultMap">
-        SELECT * FROM Reservation WHERE meeting_room_id = #{meetingRoomId}
-        ORDER BY meeting_date DESC, start_time DESC
-    </select>
-
-    <select id="selectReservationsByDateRange" resultMap="ReservationResultMap">
-        SELECT * FROM Reservation 
-        WHERE meeting_room_id = #{meetingRoomId}
-        AND meeting_date BETWEEN #{startDate} AND #{endDate}
-        ORDER BY meeting_date, start_time
-    </select>
-
-    <insert id="insertReservation" parameterType="Reservation">
-        INSERT INTO Reservation (
-            user_id,
-            meeting_room_id,
-            meeting_date,
-            start_time,
-            end_time,
-            participant_count,
-            meeting_subject,
-            status,
-            created_time
-        ) VALUES (
-            #{userId},
-            #{meetingRoomId},
-            #{meetingDate},
-            #{startTime},
-            #{endTime},
-            #{participantCount},
-            #{meetingSubject},
-            #{status},
-            #{createdTime}
-        )
-    </insert>
-
-    <update id="updateReservation" parameterType="Reservation">
-        UPDATE Reservation 
-        <set>
-            <if test="meetingDate != null">meeting_date = #{meetingDate},</if>
-            <if test="startTime != null">start_time = #{startTime},</if>
-            <if test="endTime != null">end_time = #{endTime},</if>
-            <if test="participantCount != 0">participant_count = #{participantCount},</if>
-            <if test="meetingSubject != null">meeting_subject = #{meetingSubject},</if>
-            <if test="status != null">status = #{status},</if>
-            <if test="rejectionReason != null">rejection_reason = #{rejectionReason},</if>
-            <if test="approvalTime != null">approval_time = #{approvalTime}</if>
-        </set>
-        WHERE reservation_id = #{reservationId}
-    </update>
-
-    <delete id="deleteReservation">
-        DELETE FROM Reservation WHERE reservation_id = #{reservationId}
-    </delete>
 </mapper>

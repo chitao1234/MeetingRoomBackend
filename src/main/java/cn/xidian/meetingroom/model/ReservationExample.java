@@ -1,8 +1,6 @@
 package cn.xidian.meetingroom.model;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -287,66 +285,6 @@ public class ReservationExample {
             return (Criteria) this;
         }
 
-        public Criteria andMeetingDateIsNull() {
-            addCriterion("meeting_date is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andMeetingDateIsNotNull() {
-            addCriterion("meeting_date is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andMeetingDateEqualTo(LocalDate value) {
-            addCriterion("meeting_date =", value, "meetingDate");
-            return (Criteria) this;
-        }
-
-        public Criteria andMeetingDateNotEqualTo(LocalDate value) {
-            addCriterion("meeting_date <>", value, "meetingDate");
-            return (Criteria) this;
-        }
-
-        public Criteria andMeetingDateGreaterThan(LocalDate value) {
-            addCriterion("meeting_date >", value, "meetingDate");
-            return (Criteria) this;
-        }
-
-        public Criteria andMeetingDateGreaterThanOrEqualTo(LocalDate value) {
-            addCriterion("meeting_date >=", value, "meetingDate");
-            return (Criteria) this;
-        }
-
-        public Criteria andMeetingDateLessThan(LocalDate value) {
-            addCriterion("meeting_date <", value, "meetingDate");
-            return (Criteria) this;
-        }
-
-        public Criteria andMeetingDateLessThanOrEqualTo(LocalDate value) {
-            addCriterion("meeting_date <=", value, "meetingDate");
-            return (Criteria) this;
-        }
-
-        public Criteria andMeetingDateIn(List<LocalDate> values) {
-            addCriterion("meeting_date in", values, "meetingDate");
-            return (Criteria) this;
-        }
-
-        public Criteria andMeetingDateNotIn(List<LocalDate> values) {
-            addCriterion("meeting_date not in", values, "meetingDate");
-            return (Criteria) this;
-        }
-
-        public Criteria andMeetingDateBetween(LocalDate value1, LocalDate value2) {
-            addCriterion("meeting_date between", value1, value2, "meetingDate");
-            return (Criteria) this;
-        }
-
-        public Criteria andMeetingDateNotBetween(LocalDate value1, LocalDate value2) {
-            addCriterion("meeting_date not between", value1, value2, "meetingDate");
-            return (Criteria) this;
-        }
-
         public Criteria andStartTimeIsNull() {
             addCriterion("start_time is null");
             return (Criteria) this;
@@ -357,52 +295,52 @@ public class ReservationExample {
             return (Criteria) this;
         }
 
-        public Criteria andStartTimeEqualTo(LocalTime value) {
+        public Criteria andStartTimeEqualTo(LocalDateTime value) {
             addCriterion("start_time =", value, "startTime");
             return (Criteria) this;
         }
 
-        public Criteria andStartTimeNotEqualTo(LocalTime value) {
+        public Criteria andStartTimeNotEqualTo(LocalDateTime value) {
             addCriterion("start_time <>", value, "startTime");
             return (Criteria) this;
         }
 
-        public Criteria andStartTimeGreaterThan(LocalTime value) {
+        public Criteria andStartTimeGreaterThan(LocalDateTime value) {
             addCriterion("start_time >", value, "startTime");
             return (Criteria) this;
         }
 
-        public Criteria andStartTimeGreaterThanOrEqualTo(LocalTime value) {
+        public Criteria andStartTimeGreaterThanOrEqualTo(LocalDateTime value) {
             addCriterion("start_time >=", value, "startTime");
             return (Criteria) this;
         }
 
-        public Criteria andStartTimeLessThan(LocalTime value) {
+        public Criteria andStartTimeLessThan(LocalDateTime value) {
             addCriterion("start_time <", value, "startTime");
             return (Criteria) this;
         }
 
-        public Criteria andStartTimeLessThanOrEqualTo(LocalTime value) {
+        public Criteria andStartTimeLessThanOrEqualTo(LocalDateTime value) {
             addCriterion("start_time <=", value, "startTime");
             return (Criteria) this;
         }
 
-        public Criteria andStartTimeIn(List<LocalTime> values) {
+        public Criteria andStartTimeIn(List<LocalDateTime> values) {
             addCriterion("start_time in", values, "startTime");
             return (Criteria) this;
         }
 
-        public Criteria andStartTimeNotIn(List<LocalTime> values) {
+        public Criteria andStartTimeNotIn(List<LocalDateTime> values) {
             addCriterion("start_time not in", values, "startTime");
             return (Criteria) this;
         }
 
-        public Criteria andStartTimeBetween(LocalTime value1, LocalTime value2) {
+        public Criteria andStartTimeBetween(LocalDateTime value1, LocalDateTime value2) {
             addCriterion("start_time between", value1, value2, "startTime");
             return (Criteria) this;
         }
 
-        public Criteria andStartTimeNotBetween(LocalTime value1, LocalTime value2) {
+        public Criteria andStartTimeNotBetween(LocalDateTime value1, LocalDateTime value2) {
             addCriterion("start_time not between", value1, value2, "startTime");
             return (Criteria) this;
         }
@@ -417,52 +355,52 @@ public class ReservationExample {
             return (Criteria) this;
         }
 
-        public Criteria andEndTimeEqualTo(LocalTime value) {
+        public Criteria andEndTimeEqualTo(LocalDateTime value) {
             addCriterion("end_time =", value, "endTime");
             return (Criteria) this;
         }
 
-        public Criteria andEndTimeNotEqualTo(LocalTime value) {
+        public Criteria andEndTimeNotEqualTo(LocalDateTime value) {
             addCriterion("end_time <>", value, "endTime");
             return (Criteria) this;
         }
 
-        public Criteria andEndTimeGreaterThan(LocalTime value) {
+        public Criteria andEndTimeGreaterThan(LocalDateTime value) {
             addCriterion("end_time >", value, "endTime");
             return (Criteria) this;
         }
 
-        public Criteria andEndTimeGreaterThanOrEqualTo(LocalTime value) {
+        public Criteria andEndTimeGreaterThanOrEqualTo(LocalDateTime value) {
             addCriterion("end_time >=", value, "endTime");
             return (Criteria) this;
         }
 
-        public Criteria andEndTimeLessThan(LocalTime value) {
+        public Criteria andEndTimeLessThan(LocalDateTime value) {
             addCriterion("end_time <", value, "endTime");
             return (Criteria) this;
         }
 
-        public Criteria andEndTimeLessThanOrEqualTo(LocalTime value) {
+        public Criteria andEndTimeLessThanOrEqualTo(LocalDateTime value) {
             addCriterion("end_time <=", value, "endTime");
             return (Criteria) this;
         }
 
-        public Criteria andEndTimeIn(List<LocalTime> values) {
+        public Criteria andEndTimeIn(List<LocalDateTime> values) {
             addCriterion("end_time in", values, "endTime");
             return (Criteria) this;
         }
 
-        public Criteria andEndTimeNotIn(List<LocalTime> values) {
+        public Criteria andEndTimeNotIn(List<LocalDateTime> values) {
             addCriterion("end_time not in", values, "endTime");
             return (Criteria) this;
         }
 
-        public Criteria andEndTimeBetween(LocalTime value1, LocalTime value2) {
+        public Criteria andEndTimeBetween(LocalDateTime value1, LocalDateTime value2) {
             addCriterion("end_time between", value1, value2, "endTime");
             return (Criteria) this;
         }
 
-        public Criteria andEndTimeNotBetween(LocalTime value1, LocalTime value2) {
+        public Criteria andEndTimeNotBetween(LocalDateTime value1, LocalDateTime value2) {
             addCriterion("end_time not between", value1, value2, "endTime");
             return (Criteria) this;
         }

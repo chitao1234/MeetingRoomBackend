@@ -1,8 +1,6 @@
 package cn.xidian.meetingroom.model;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 public class Reservation {
     private Integer reservationId;
@@ -11,11 +9,9 @@ public class Reservation {
 
     private Integer meetingRoomId;
 
-    private LocalDate meetingDate;
+    private LocalDateTime startTime;
 
-    private LocalTime startTime;
-
-    private LocalTime endTime;
+    private LocalDateTime endTime;
 
     private Integer participantCount;
 
@@ -51,27 +47,19 @@ public class Reservation {
         this.meetingRoomId = meetingRoomId;
     }
 
-    public LocalDate getMeetingDate() {
-        return meetingDate;
-    }
-
-    public void setMeetingDate(LocalDate meetingDate) {
-        this.meetingDate = meetingDate;
-    }
-
-    public LocalTime getStartTime() {
+    public LocalDateTime getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(LocalTime startTime) {
+    public void setStartTime(LocalDateTime startTime) {
         this.startTime = startTime;
     }
 
-    public LocalTime getEndTime() {
+    public LocalDateTime getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(LocalTime endTime) {
+    public void setEndTime(LocalDateTime endTime) {
         this.endTime = endTime;
     }
 

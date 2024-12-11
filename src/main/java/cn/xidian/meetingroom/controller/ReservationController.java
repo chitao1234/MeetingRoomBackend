@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/api/reservations")
@@ -36,10 +36,10 @@ public class ReservationController {
     @GetMapping("/room/{roomId}")
     public ResponseEntity<List<ReservationWithBLOBs>> getRoomReservations(
             @PathVariable Integer roomId,
-            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
-            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate) {
-        if (startDate != null && endDate != null) {
-            return ResponseEntity.ok(reservationService.getReservationsByDateRange(roomId, startDate, endDate));
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDateTime,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDateTime) {
+        if (startDateTime != null && endDateTime != null) {
+            return ResponseEntity.ok(reservationService.getReservationsByTimeRange(roomId, startDateTime, endDateTime));
         }
         return ResponseEntity.ok(reservationService.getReservationsByMeetingRoomId(roomId));
     }

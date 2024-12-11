@@ -39,11 +39,12 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public List<ReservationWithBLOBs> getReservationsByDateRange(Integer meetingRoomId, LocalDate startDate, LocalDate endDate) {
+    public List<ReservationWithBLOBs> getReservationsByTimeRange(Integer meetingRoomId, LocalDateTime startTime, LocalDateTime endTime) {
         ReservationExample example = new ReservationExample();
         example.createCriteria()
             .andMeetingRoomIdEqualTo(meetingRoomId)
-            .andMeetingDateBetween(startDate, endDate);
+            .andStartTimeGreaterThan(startTime)
+            .andEndTimeLessThan(endTime);
         return reservationMapper.selectByExampleWithBLOBs(example);
     }
 

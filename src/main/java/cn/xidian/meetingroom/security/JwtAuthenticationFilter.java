@@ -32,38 +32,45 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, 
                                   HttpServletResponse response, 
                                   FilterChain filterChain) throws ServletException, IOException {
-        final String authHeader = request.getHeader("Authorization");
-        
-        logger.debug("Processing request to: " + request.getRequestURI());
-        logger.debug("Authorization header: " + (authHeader != null ? "present" : "missing"));
-        
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            logger.debug("No valid authorization header found");
-            filterChain.doFilter(request, response);
-            return;
-        }
-
-        final String jwt = authHeader.substring(7);
-        final String username = jwtUtils.extractUsername(jwt);
-
-        logger.debug("Extracted username from JWT: " + username);
-
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+        try {
+            final String authHeader = request.getHeader("Authorization");
             
-            if (jwtUtils.isTokenValid(jwt, userDetails)) {
-                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                    userDetails,
-                    null,
-                    userDetails.getAuthorities()
-                );
-                logger.debug("User authorities: " + userDetails.getAuthorities());
-                SecurityContextHolder.getContext().setAuthentication(authToken);
-                logger.debug("Authentication token set in SecurityContext");
-            } else {
-                logger.debug("Invalid JWT token");
+            logger.debug("Processing request to: " + request.getRequestURI());
+            logger.debug("Authorization header: " + (authHeader != null ? "present" : "missing"));
+            
+            if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+                logger.debug("No valid authorization header found");
+                filterChain.doFilter(request, response);
+                return;
             }
+    
+            final String jwt = authHeader.substring(7);
+            if (jwt.isEmpty()) {
+                logger.debug("Empty JWT token");
+                filterChain.doFilter(request, response);
+                return;
+            }
+    
+            try {
+                final String username = jwtUtils.extractUsername(jwt);
+                if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                    UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+                    if (jwtUtils.isTokenValid(jwt, userDetails)) {
+                        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                            userDetails,
+                            null,
+                            userDetails.getAuthorities()
+                        );
+                        SecurityContextHolder.getContext().setAuthentication(authToken);
+                    }
+                }
+            } catch (io.jsonwebtoken.JwtException e) {
+                logger.error("JWT token validation failed: " + e.getMessage());
+            }
+        } catch (Exception e) {
+            logger.error("Error processing JWT token: " + e.getMessage());
         }
+        
         filterChain.doFilter(request, response);
     }
 } 
