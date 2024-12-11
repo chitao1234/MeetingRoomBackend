@@ -1,4 +1,4 @@
-const BASE_URL = 'http://120.26.3.16:58083';  // 替换为实际的API URL
+const BASE_URL = 'http://localhost:8080';  // 替换为实际的API URL
 
 document.getElementById('login-form').addEventListener('submit', function (event) {
     event.preventDefault();

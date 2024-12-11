@@ -1,4 +1,4 @@
-const BASE_URL = 'http://120.26.3.16:58083'; // 替换为实际API URL
+const BASE_URL = 'http://localhost:8080'; // 替换为实际API URL
 
 // 用户登出
 function logout() {
