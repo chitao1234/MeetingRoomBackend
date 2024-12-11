@@ -6,6 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.time.LocalDateTime;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @RestController
 @RequestMapping("/api/meeting-rooms")
@@ -21,6 +23,15 @@ public class MeetingRoomController {
     public ResponseEntity<List<MeetingRoomWithBLOBs>> getAllMeetingRooms() {
         List<MeetingRoomWithBLOBs> meetingRooms = meetingRoomService.getAllMeetingRooms();
         return ResponseEntity.ok(meetingRooms);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<MeetingRoomWithBLOBs>> searchMeetingRooms(
+            @RequestParam(required = false) Integer minCapacity,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startTime,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endTime) {
+        List<MeetingRoomWithBLOBs> availableRooms = meetingRoomService.searchAvailableMeetingRooms(minCapacity, startTime, endTime);
+        return ResponseEntity.ok(availableRooms);
     }
 
     @GetMapping("/{id}")
