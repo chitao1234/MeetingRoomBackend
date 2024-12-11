@@ -1,16 +1,37 @@
 package cn.xidian.meetingroom.mapper;
 
 import cn.xidian.meetingroom.model.Log;
-import org.apache.ibatis.annotations.Mapper;
+import cn.xidian.meetingroom.model.LogExample;
+import cn.xidian.meetingroom.model.LogWithBLOBs;
 import java.util.List;
-import java.util.Date;
+import org.apache.ibatis.annotations.Param;
 
-@Mapper
 public interface LogMapper {
-    Log selectLogById(Long logId);
-    List<Log> selectLogsByUserId(Long userId);
-    List<Log> selectLogsByDateRange(Date startDate, Date endDate);
-    List<Log> selectLogsByOperationType(String operationType);
-    void insertLog(Log log);
-    void deleteLogsBefore(Date date);
+    long countByExample(LogExample example);
+
+    int deleteByExample(LogExample example);
+
+    int deleteByPrimaryKey(Integer logId);
+
+    int insert(LogWithBLOBs row);
+
+    int insertSelective(LogWithBLOBs row);
+
+    List<LogWithBLOBs> selectByExampleWithBLOBs(LogExample example);
+
+    List<Log> selectByExample(LogExample example);
+
+    LogWithBLOBs selectByPrimaryKey(Integer logId);
+
+    int updateByExampleSelective(@Param("row") LogWithBLOBs row, @Param("example") LogExample example);
+
+    int updateByExampleWithBLOBs(@Param("row") LogWithBLOBs row, @Param("example") LogExample example);
+
+    int updateByExample(@Param("row") Log row, @Param("example") LogExample example);
+
+    int updateByPrimaryKeySelective(LogWithBLOBs row);
+
+    int updateByPrimaryKeyWithBLOBs(LogWithBLOBs row);
+
+    int updateByPrimaryKey(Log row);
 }

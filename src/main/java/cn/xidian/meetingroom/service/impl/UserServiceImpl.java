@@ -2,14 +2,14 @@ package cn.xidian.meetingroom.service.impl;
 
 import cn.xidian.meetingroom.mapper.UserMapper;
 import cn.xidian.meetingroom.model.User;
+import cn.xidian.meetingroom.model.UserExample;
 import cn.xidian.meetingroom.service.UserService;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.List;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -24,11 +24,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userMapper.selectUserByUsername(username);
-        if (user == null) {
+        UserExample example = new UserExample();
+        example.createCriteria().andUsernameEqualTo(username);
+        List<User> users = userMapper.selectByExample(example);
+        
+        if (users.isEmpty()) {
             throw new UsernameNotFoundException("User not found with username: " + username);
         }
 
+        User user = users.get(0);
         return org.springframework.security.core.userdetails.User
                 .withUsername(user.getUsername())
                 .password(user.getPassword())
@@ -37,38 +41,50 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUserById(Long userId) {
-        return userMapper.selectUserById(userId);
+    public User getUserById(Integer userId) {
+        return userMapper.selectByPrimaryKey(userId);
     }
 
     @Override
     public User getUserByUsername(String username) {
-        return userMapper.selectUserByUsername(username);
+        UserExample example = new UserExample();
+        example.createCriteria().andUsernameEqualTo(username);
+        List<User> users = userMapper.selectByExample(example);
+        return users.isEmpty() ? null : users.get(0);
     }
 
     @Override
     public List<User> getAllUsers() {
-        return userMapper.selectAllUsers();
+        return userMapper.selectByExample(new UserExample());
     }
 
     @Override
     public User createUser(User user) {
-        if (userMapper.existsByUsername(user.getUsername())) {
+        // Check username existence
+        UserExample usernameExample = new UserExample();
+        usernameExample.createCriteria().andUsernameEqualTo(user.getUsername());
+        if (!userMapper.selectByExample(usernameExample).isEmpty()) {
             throw new IllegalArgumentException("Username already exists");
         }
-        if (user.getEmail() != null && userMapper.existsByEmail(user.getEmail())) {
-            throw new IllegalArgumentException("Email already exists");
+
+        // Check email existence
+        if (user.getEmail() != null) {
+            UserExample emailExample = new UserExample();
+            emailExample.createCriteria().andEmailEqualTo(user.getEmail());
+            if (!userMapper.selectByExample(emailExample).isEmpty()) {
+                throw new IllegalArgumentException("Email already exists");
+            }
         }
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setCreatedTime(new Date());
-        userMapper.insertUser(user);
+        user.setCreatedTime(LocalDateTime.now());
+        userMapper.insertSelective(user);
         return user;
     }
 
     @Override
-    public User updateUser(Long userId, User user) {
-        User existingUser = userMapper.selectUserById(userId);
+    public User updateUser(Integer userId, User user) {
+        User existingUser = userMapper.selectByPrimaryKey(userId);
         if (existingUser == null) {
             return null;
         }
@@ -76,17 +92,20 @@ public class UserServiceImpl implements UserService {
         user.setUserId(userId);
         user.setPassword(existingUser.getPassword());
         user.setCreatedTime(existingUser.getCreatedTime());
-        userMapper.updateUser(user);
-        return user;
+        userMapper.updateByPrimaryKeySelective(user);
+        return userMapper.selectByPrimaryKey(userId);
     }
 
     @Override
-    public void deleteUser(Long userId) {
-        userMapper.deleteUser(userId);
+    public void deleteUser(Integer userId) {
+        userMapper.deleteByPrimaryKey(userId);
     }
 
     @Override
-    public void updateLastLoginTime(Long userId) {
-        userMapper.updateLastLoginTime(userId, new Date());
+    public void updateLastLoginTime(Integer userId) {
+        User user = new User();
+        user.setUserId(userId);
+        user.setLastLoginTime(LocalDateTime.now());
+        userMapper.updateByPrimaryKeySelective(user);
     }
 } 

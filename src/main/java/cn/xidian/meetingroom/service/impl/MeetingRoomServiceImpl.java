@@ -1,11 +1,12 @@
 package cn.xidian.meetingroom.service.impl;
 
 import cn.xidian.meetingroom.mapper.MeetingRoomMapper;
-import cn.xidian.meetingroom.model.MeetingRoom;
+import cn.xidian.meetingroom.model.MeetingRoomExample;
+import cn.xidian.meetingroom.model.MeetingRoomWithBLOBs;
 import cn.xidian.meetingroom.service.MeetingRoomService;
 
-import java.util.Date;
 import java.util.List;
+import java.time.LocalDateTime;
 
 import org.springframework.stereotype.Service;
 
@@ -19,60 +20,40 @@ public class MeetingRoomServiceImpl implements MeetingRoomService {
     }
 
     @Override
-    public MeetingRoom getMeetingRoomById(Long meetingRoomId) {
-        return meetingRoomMapper.selectMeetingRoomById(meetingRoomId);
+    public MeetingRoomWithBLOBs getMeetingRoomById(Integer meetingRoomId) {
+        return meetingRoomMapper.selectByPrimaryKey(meetingRoomId);
     }
 
     @Override
-    public MeetingRoom createMeetingRoom(MeetingRoom meetingRoom) {
-        meetingRoom.setCreatedTime(new Date());
-        meetingRoom.setUpdatedTime(new Date());
-        meetingRoomMapper.insertMeetingRoom(meetingRoom);
+    public MeetingRoomWithBLOBs createMeetingRoom(MeetingRoomWithBLOBs meetingRoom) {
+        meetingRoom.setCreatedTime(LocalDateTime.now());
+        meetingRoom.setUpdatedTime(LocalDateTime.now());
+        meetingRoomMapper.insertSelective(meetingRoom);
         return meetingRoom;
     }
 
     @Override
-    public List<MeetingRoom> getAllMeetingRooms() {
-        return meetingRoomMapper.selectAllMeetingRooms();
+    public List<MeetingRoomWithBLOBs> getAllMeetingRooms() {
+        return meetingRoomMapper.selectByExampleWithBLOBs(new MeetingRoomExample());
     }
 
     @Override
-    public MeetingRoom updateMeetingRoom(Long meetingRoomId, MeetingRoom meetingRoom) {
-        MeetingRoom existingRoom = meetingRoomMapper.selectMeetingRoomById(meetingRoomId);
+    public MeetingRoomWithBLOBs updateMeetingRoom(Integer meetingRoomId, MeetingRoomWithBLOBs meetingRoom) {
+        MeetingRoomWithBLOBs existingRoom = meetingRoomMapper.selectByPrimaryKey(meetingRoomId);
         if (existingRoom == null) {
             return null;
         }
         
-        MeetingRoom updateRoom = new MeetingRoom();
-        updateRoom.setMeetingRoomId(meetingRoomId);
-        updateRoom.setCreatedTime(existingRoom.getCreatedTime());
-        updateRoom.setUpdatedTime(new Date());
+        meetingRoom.setMeetingRoomId(meetingRoomId);
+        meetingRoom.setCreatedTime(existingRoom.getCreatedTime());
+        meetingRoom.setUpdatedTime(LocalDateTime.now());
+        meetingRoomMapper.updateByPrimaryKeySelective(meetingRoom);
         
-        if (meetingRoom.getName() != null) {
-            updateRoom.setName(meetingRoom.getName());
-        }
-        if (meetingRoom.getRoomNumber() != null) {
-            updateRoom.setRoomNumber(meetingRoom.getRoomNumber());
-        }
-        if (meetingRoom.getCapacity() != null) {
-            updateRoom.setCapacity(meetingRoom.getCapacity());
-        }
-        if (meetingRoom.getArea() != null) {
-            updateRoom.setArea(meetingRoom.getArea());
-        }
-        if (meetingRoom.getPhotoUrl() != null) {
-            updateRoom.setPhotoUrl(meetingRoom.getPhotoUrl());
-        }
-        if (meetingRoom.getDescription() != null) {
-            updateRoom.setDescription(meetingRoom.getDescription());
-        }
-        
-        meetingRoomMapper.updateMeetingRoom(updateRoom);
-        return meetingRoomMapper.selectMeetingRoomById(meetingRoomId);
+        return meetingRoomMapper.selectByPrimaryKey(meetingRoomId);
     }
 
     @Override
-    public void deleteMeetingRoom(Long meetingRoomId) {
-        meetingRoomMapper.deleteMeetingRoom(meetingRoomId);
+    public void deleteMeetingRoom(Integer meetingRoomId) {
+        meetingRoomMapper.deleteByPrimaryKey(meetingRoomId);
     }
 } 

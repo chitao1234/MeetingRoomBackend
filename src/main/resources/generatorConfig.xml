@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+    <context id="MeetingRoomTables" targetRuntime="MyBatis3">
+        <commentGenerator>
+            <property name="suppressDate" value="true"/>
+            <property name="suppressAllComments" value="true"/>
+        </commentGenerator>
+
+        <!-- Database connection -->
+        <jdbcConnection driverClass="com.mysql.cj.jdbc.Driver"
+                        connectionURL="jdbc:mysql://120.26.3.16:50336/MeetingRoom"
+                        userId="shixun"
+                        password="${DATABASE_PASSWORD}">
+        </jdbcConnection>
+
+        <javaTypeResolver>
+            <property name="forceBigDecimals" value="false"/>
+            <property name="useJSR310Types" value="true"/>
+        </javaTypeResolver>
+
+        <!-- Model Class -->
+        <javaModelGenerator targetPackage="cn.xidian.meetingroom.model"
+                           targetProject="src/main/java">
+            <property name="enableSubPackages" value="true"/>
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+
+        <!-- Mapper XML -->
+        <sqlMapGenerator targetPackage="mappers"
+                        targetProject="src/main/resources">
+            <property name="enableSubPackages" value="true"/>
+        </sqlMapGenerator>
+
+        <!-- Mapper Interface -->
+        <javaClientGenerator type="XMLMAPPER"
+                           targetPackage="cn.xidian.meetingroom.mapper"
+                           targetProject="src/main/java">
+            <property name="enableSubPackages" value="true"/>
+        </javaClientGenerator>
+
+        <!-- Tables to generate -->
+        <table tableName="User" domainObjectName="User">
+            <generatedKey column="user_id" sqlStatement="MYSQL" identity="true"/>
+        </table>
+        <table tableName="MeetingRoom" domainObjectName="MeetingRoom">
+            <generatedKey column="meeting_room_id" sqlStatement="MYSQL" identity="true"/>
+        </table>
+        <table tableName="Reservation" domainObjectName="Reservation">
+            <generatedKey column="reservation_id" sqlStatement="MYSQL" identity="true"/>
+        </table>
+        <table tableName="Notification" domainObjectName="Notification">
+            <generatedKey column="notification_id" sqlStatement="MYSQL" identity="true"/>
+        </table>
+        <table tableName="Log" domainObjectName="Log">
+            <generatedKey column="log_id" sqlStatement="MYSQL" identity="true"/>
+        </table>
+    </context>
+</generatorConfiguration>

@@ -1,17 +1,37 @@
 package cn.xidian.meetingroom.mapper;
 
 import cn.xidian.meetingroom.model.Reservation;
-import org.apache.ibatis.annotations.Mapper;
+import cn.xidian.meetingroom.model.ReservationExample;
+import cn.xidian.meetingroom.model.ReservationWithBLOBs;
 import java.util.List;
-import java.util.Date;
+import org.apache.ibatis.annotations.Param;
 
-@Mapper
 public interface ReservationMapper {
-    Reservation selectReservationById(Long reservationId);
-    List<Reservation> selectReservationsByUserId(Long userId);
-    List<Reservation> selectReservationsByMeetingRoomId(Long meetingRoomId);
-    List<Reservation> selectReservationsByDateRange(Long meetingRoomId, Date startDate, Date endDate);
-    void insertReservation(Reservation reservation);
-    void updateReservation(Reservation reservation);
-    void deleteReservation(Long reservationId);
+    long countByExample(ReservationExample example);
+
+    int deleteByExample(ReservationExample example);
+
+    int deleteByPrimaryKey(Integer reservationId);
+
+    int insert(ReservationWithBLOBs row);
+
+    int insertSelective(ReservationWithBLOBs row);
+
+    List<ReservationWithBLOBs> selectByExampleWithBLOBs(ReservationExample example);
+
+    List<Reservation> selectByExample(ReservationExample example);
+
+    ReservationWithBLOBs selectByPrimaryKey(Integer reservationId);
+
+    int updateByExampleSelective(@Param("row") ReservationWithBLOBs row, @Param("example") ReservationExample example);
+
+    int updateByExampleWithBLOBs(@Param("row") ReservationWithBLOBs row, @Param("example") ReservationExample example);
+
+    int updateByExample(@Param("row") Reservation row, @Param("example") ReservationExample example);
+
+    int updateByPrimaryKeySelective(ReservationWithBLOBs row);
+
+    int updateByPrimaryKeyWithBLOBs(ReservationWithBLOBs row);
+
+    int updateByPrimaryKey(Reservation row);
 }

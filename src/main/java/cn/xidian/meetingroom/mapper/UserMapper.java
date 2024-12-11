@@ -1,20 +1,30 @@
 package cn.xidian.meetingroom.mapper;
 
 import cn.xidian.meetingroom.model.User;
-import org.apache.ibatis.annotations.Mapper;
+import cn.xidian.meetingroom.model.UserExample;
 import java.util.List;
-import java.util.Date;
+import org.apache.ibatis.annotations.Param;
 
-@Mapper
 public interface UserMapper {
-    User selectUserById(Long userId);
-    User selectUserByUsername(String username);
-    List<User> selectAllUsers();
-    void insertUser(User user);
-    void updateUser(User user);
-    void deleteUser(Long userId);
-    void updateLastLoginTime(Long userId, Date lastLoginTime);
-    List<User> selectUsersByRole(String role);
-    boolean existsByUsername(String username);
-    boolean existsByEmail(String email);
+    long countByExample(UserExample example);
+
+    int deleteByExample(UserExample example);
+
+    int deleteByPrimaryKey(Integer userId);
+
+    int insert(User row);
+
+    int insertSelective(User row);
+
+    List<User> selectByExample(UserExample example);
+
+    User selectByPrimaryKey(Integer userId);
+
+    int updateByExampleSelective(@Param("row") User row, @Param("example") UserExample example);
+
+    int updateByExample(@Param("row") User row, @Param("example") UserExample example);
+
+    int updateByPrimaryKeySelective(User row);
+
+    int updateByPrimaryKey(User row);
 }
