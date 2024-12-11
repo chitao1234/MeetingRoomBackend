@@ -42,7 +42,7 @@ public class NotificationServiceImpl implements NotificationService {
     public Notification createNotification(Notification notification) {
         notification.setCreatedTime(LocalDateTime.now());
         notification.setIsRead(false);
-        notificationMapper.insert(notification);
+        notificationMapper.insertSelective(notification);
         return notification;
     }
 

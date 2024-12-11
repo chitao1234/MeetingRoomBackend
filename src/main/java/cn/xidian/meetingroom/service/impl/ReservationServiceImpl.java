@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Service
 public class ReservationServiceImpl implements ReservationService {
@@ -52,7 +51,7 @@ public class ReservationServiceImpl implements ReservationService {
     public ReservationWithBLOBs createReservation(ReservationWithBLOBs reservation) {
         reservation.setStatus("PENDING");
         reservation.setCreatedTime(LocalDateTime.now());
-        reservationMapper.insert(reservation);
+        reservationMapper.insertSelective(reservation);
         return reservation;
     }
 

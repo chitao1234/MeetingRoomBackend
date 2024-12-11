@@ -78,7 +78,7 @@ public class UserServiceImpl implements UserService {
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setCreatedTime(LocalDateTime.now());
-        userMapper.insert(user);
+        userMapper.insertSelective(user);
         return user;
     }
 

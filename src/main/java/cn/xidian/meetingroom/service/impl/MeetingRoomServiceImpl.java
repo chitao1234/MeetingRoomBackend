@@ -1,12 +1,10 @@
 package cn.xidian.meetingroom.service.impl;
 
 import cn.xidian.meetingroom.mapper.MeetingRoomMapper;
-import cn.xidian.meetingroom.model.MeetingRoom;
 import cn.xidian.meetingroom.model.MeetingRoomExample;
 import cn.xidian.meetingroom.model.MeetingRoomWithBLOBs;
 import cn.xidian.meetingroom.service.MeetingRoomService;
 
-import java.util.Date;
 import java.util.List;
 import java.time.LocalDateTime;
 
@@ -30,7 +28,7 @@ public class MeetingRoomServiceImpl implements MeetingRoomService {
     public MeetingRoomWithBLOBs createMeetingRoom(MeetingRoomWithBLOBs meetingRoom) {
         meetingRoom.setCreatedTime(LocalDateTime.now());
         meetingRoom.setUpdatedTime(LocalDateTime.now());
-        meetingRoomMapper.insert(meetingRoom);
+        meetingRoomMapper.insertSelective(meetingRoom);
         return meetingRoom;
     }
 

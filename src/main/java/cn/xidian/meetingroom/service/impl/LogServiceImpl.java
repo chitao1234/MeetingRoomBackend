@@ -1,14 +1,12 @@
 package cn.xidian.meetingroom.service.impl;
 
 import cn.xidian.meetingroom.mapper.LogMapper;
-import cn.xidian.meetingroom.model.Log;
 import cn.xidian.meetingroom.model.LogExample;
 import cn.xidian.meetingroom.model.LogWithBLOBs;
 import cn.xidian.meetingroom.service.LogService;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.time.LocalDateTime;
-import java.util.Calendar;
 
 @Service
 public class LogServiceImpl implements LogService {
@@ -54,7 +52,7 @@ public class LogServiceImpl implements LogService {
         log.setIpAddress(ipAddress);
         log.setCreatedTime(LocalDateTime.now());
         
-        logMapper.insert(log);
+        logMapper.insertSelective(log);
         return log;
     }
 
