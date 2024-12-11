@@ -39,6 +39,7 @@ document.getElementById('search-room-form').addEventListener('submit', function 
 // 预订会议室
 function bookRoom(roomId, startTime, endTime, attendees) {
     const token = localStorage.getItem('token');
+    const userId = localStorage.getItem('userId'); // 从本地存储获取 userId
     const topic = prompt('Enter meeting topic:'); // 获取会议主题
 
     if (!topic) {
@@ -47,6 +48,7 @@ function bookRoom(roomId, startTime, endTime, attendees) {
     }
 
     axios.post(`${BASE_URL}/api/reservations`, {
+        userId, // 添加 userId
         meetingRoomId: roomId,
         startTime,
         endTime,
@@ -68,12 +70,14 @@ document.getElementById('reservation-form').addEventListener('submit', function 
     e.preventDefault();
 
     const token = localStorage.getItem('token');
+    const userId = localStorage.getItem('userId'); // 从本地存储获取 userId
     const startTime = document.getElementById('start-time').value;
     const endTime = document.getElementById('end-time').value;
     const attendees = document.getElementById('attendees').value;
     const topic = document.getElementById('topic').value;
 
     axios.post(`${BASE_URL}/api/reservations`, {
+        userId, // 添加 userId
         startTime,
         endTime,
         participantCount: attendees,
