@@ -13,15 +13,20 @@ document.getElementById('login-form').addEventListener('submit', function (event
     })
     .then(response => {
         const token = response.data.token;
+        const userId = response.data.userId; // 假设服务端返回的用户ID字段为 userId
 
-        // 将 token 存储到 Bearer 格式的 Authorization 头部
+        // 将 token 和 userId 存储到本地存储
+        localStorage.setItem('token', token);
+        localStorage.setItem('userId', userId);
+
+        // 设置默认的 Authorization 头部
         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
         
         // 登录成功，进行后续操作
         alert('Login successful!');
-        console.log('Token:', token);
+        console.log('Token:', token, 'UserID:', userId);
 
-        // 你可以在这里进行页面跳转或其它操作
+        // 页面跳转到用户仪表板
         window.location.href = 'user-dashboard.html';
     })
     .catch(error => {

@@ -3,6 +3,7 @@ const BASE_URL = 'http://120.26.3.16:58083'; // 替换为实际API URL
 // 用户登出
 function logout() {
     localStorage.removeItem('token');
+    localStorage.removeItem('userId'); // 移除存储的 userId
     window.location.href = 'login.html';
 }
 
@@ -91,8 +92,9 @@ document.getElementById('reservation-form').addEventListener('submit', function 
 // 加载用户预约
 function loadReservations() {
     const token = localStorage.getItem('token');
+    const userId = localStorage.getItem('userId'); // 从本地存储获取 userId
 
-    axios.get(`${BASE_URL}/api/reservations/user/{userId}`, {
+    axios.get(`${BASE_URL}/api/reservations/user/${userId}`, {
         headers: { 'Authorization': `Bearer ${token}` }
     }).then(response => {
         const reservations = response.data;
