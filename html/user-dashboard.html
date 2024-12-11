@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard</title>
+    <link rel="stylesheet" href="user-dashboard.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <h2>Welcome, User</h2>
+        <button onclick="logout()">Logout</button>
+
+        <h3>Search Available Rooms</h3>
+        <form id="search-room-form">
+            <input type="datetime-local" id="search-start-time" required>
+            <input type="datetime-local" id="search-end-time" required>
+            <input type="number" id="search-attendees" placeholder="Number of attendees" required><br>
+            <button type="submit">Search</button>
+        </form>
+        <div id="available-rooms-list"></div>
+
+        <h3>Book a Room</h3>
+        <form id="reservation-form">
+            <input type="datetime-local" id="start-time" required>
+            <input type="datetime-local" id="end-time" required>
+            <input type="number" id="attendees" placeholder="Number of attendees" required><br>
+            <textarea id="topic" placeholder="Meeting topic" required></textarea><br>
+            <button type="submit">Book Room</button>
+        </form>
+
+        <h3>Your Reservations</h3>
+        <div id="reservations-list"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="user-dashboard.js"></script>
+</body>
+</html>
