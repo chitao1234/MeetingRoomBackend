@@ -20,17 +20,11 @@ public class MeetingRoomController {
     }
 
     @GetMapping
-    public ResponseEntity<List<MeetingRoomWithBLOBs>> getAllMeetingRooms() {
-        List<MeetingRoomWithBLOBs> meetingRooms = meetingRoomService.getAllMeetingRooms();
-        return ResponseEntity.ok(meetingRooms);
-    }
-
-    @GetMapping("/search")
     public ResponseEntity<List<MeetingRoomWithBLOBs>> searchMeetingRooms(
-            @RequestParam(required = false) Integer minCapacity,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startTime,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endTime) {
-        List<MeetingRoomWithBLOBs> availableRooms = meetingRoomService.searchAvailableMeetingRooms(minCapacity, startTime, endTime);
+            @RequestParam(required = false) Integer attendees,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startTime,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endTime) {
+        List<MeetingRoomWithBLOBs> availableRooms = meetingRoomService.searchAvailableMeetingRooms(attendees, startTime, endTime);
         return ResponseEntity.ok(availableRooms);
     }
 

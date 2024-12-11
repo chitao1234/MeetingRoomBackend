@@ -10,7 +10,6 @@ import cn.xidian.meetingroom.service.MeetingRoomService;
 
 import java.util.List;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -67,27 +66,41 @@ public class MeetingRoomServiceImpl implements MeetingRoomService {
     @Override
     public List<MeetingRoomWithBLOBs> searchAvailableMeetingRooms(Integer minCapacity, LocalDateTime startTime, LocalDateTime endTime) {
         // Get all meeting rooms that meet the capacity requirement
-        List<MeetingRoomWithBLOBs> allRooms = meetingRoomMapper.selectByExampleWithBLOBs(new MeetingRoomExample());
+        List<MeetingRoomWithBLOBs> allRooms = null;
         if (minCapacity != null) {
-            allRooms = allRooms.stream()
-                    .filter(room -> room.getCapacity() >= minCapacity)
-                    .collect(Collectors.toList());
+            System.out.println("minCapacity: " + minCapacity);
+            MeetingRoomExample example = new MeetingRoomExample();
+            example.createCriteria().andCapacityGreaterThanOrEqualTo(minCapacity);
+            allRooms = meetingRoomMapper.selectByExampleWithBLOBs(example);
+        } else {
+            allRooms = meetingRoomMapper.selectByExampleWithBLOBs(new MeetingRoomExample());
         }
 
-            return allRooms.stream()
-                    .filter(room -> {
-                        ReservationExample example = new ReservationExample();
+        // log the allRooms
+        System.out.println("allRooms: " + allRooms);
+
+        return allRooms.stream()
+                .filter(room -> {
+                    if (startTime == null && endTime == null) {
+                        return true;
+                    }
+
+                    ReservationExample example = new ReservationExample();
+                    if (endTime != null) {
                         ReservationExample.Criteria criteria1 = example.or();
                         criteria1.andMeetingRoomIdEqualTo(room.getMeetingRoomId())
                                 .andStartTimeLessThan(endTime);
-
+                    }
+                    if (startTime != null) {
                         ReservationExample.Criteria criteria2 = example.or();
                         criteria2.andMeetingRoomIdEqualTo(room.getMeetingRoomId())
                                 .andEndTimeGreaterThan(startTime);
+                    }
 
-                        List<Reservation> conflictingReservations = reservationMapper.selectByExample(example);
-                        return conflictingReservations.isEmpty();
-                    })
-                    .collect(Collectors.toList());
+                    List<Reservation> conflictingReservations = reservationMapper.selectByExample(example);
+                    System.out.println("conflictingReservations: " + conflictingReservations);
+                    return conflictingReservations.isEmpty();
+                })
+                .collect(Collectors.toList());
     }
 } 
