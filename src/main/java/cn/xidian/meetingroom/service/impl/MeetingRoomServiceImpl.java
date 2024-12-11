@@ -77,11 +77,13 @@ public class MeetingRoomServiceImpl implements MeetingRoomService {
             return allRooms.stream()
                     .filter(room -> {
                         ReservationExample example = new ReservationExample();
-                        ReservationExample.Criteria criteria1 = example.createCriteria();
+                        ReservationExample.Criteria criteria1 = example.or();
                         criteria1.andMeetingRoomIdEqualTo(room.getMeetingRoomId())
-                                .andMeetingDateEqualTo(startTime.toLocalDate())
-                                .andStartTimeLessThan(endTime.toLocalTime())
-                                .andEndTimeGreaterThan(startTime.toLocalTime());
+                                .andStartTimeLessThan(endTime);
+
+                        ReservationExample.Criteria criteria2 = example.or();
+                        criteria2.andMeetingRoomIdEqualTo(room.getMeetingRoomId())
+                                .andEndTimeGreaterThan(startTime);
 
                         List<Reservation> conflictingReservations = reservationMapper.selectByExample(example);
                         return conflictingReservations.isEmpty();
