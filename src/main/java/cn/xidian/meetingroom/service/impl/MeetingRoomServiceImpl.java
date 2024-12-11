@@ -1,12 +1,17 @@
 package cn.xidian.meetingroom.service.impl;
 
 import cn.xidian.meetingroom.mapper.MeetingRoomMapper;
+import cn.xidian.meetingroom.mapper.ReservationMapper;
 import cn.xidian.meetingroom.model.MeetingRoomExample;
 import cn.xidian.meetingroom.model.MeetingRoomWithBLOBs;
+import cn.xidian.meetingroom.model.Reservation;
+import cn.xidian.meetingroom.model.ReservationExample;
 import cn.xidian.meetingroom.service.MeetingRoomService;
 
 import java.util.List;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -14,9 +19,11 @@ import org.springframework.stereotype.Service;
 public class MeetingRoomServiceImpl implements MeetingRoomService {
     
     private final MeetingRoomMapper meetingRoomMapper;
+    private final ReservationMapper reservationMapper;
 
-    public MeetingRoomServiceImpl(MeetingRoomMapper meetingRoomMapper) {
+    public MeetingRoomServiceImpl(MeetingRoomMapper meetingRoomMapper, ReservationMapper reservationMapper) {
         this.meetingRoomMapper = meetingRoomMapper;
+        this.reservationMapper = reservationMapper;
     }
 
     @Override
@@ -55,5 +62,30 @@ public class MeetingRoomServiceImpl implements MeetingRoomService {
     @Override
     public void deleteMeetingRoom(Integer meetingRoomId) {
         meetingRoomMapper.deleteByPrimaryKey(meetingRoomId);
+    }
+
+    @Override
+    public List<MeetingRoomWithBLOBs> searchAvailableMeetingRooms(Integer minCapacity, LocalDateTime startTime, LocalDateTime endTime) {
+        // Get all meeting rooms that meet the capacity requirement
+        List<MeetingRoomWithBLOBs> allRooms = meetingRoomMapper.selectByExampleWithBLOBs(new MeetingRoomExample());
+        if (minCapacity != null) {
+            allRooms = allRooms.stream()
+                    .filter(room -> room.getCapacity() >= minCapacity)
+                    .collect(Collectors.toList());
+        }
+
+            return allRooms.stream()
+                    .filter(room -> {
+                        ReservationExample example = new ReservationExample();
+                        ReservationExample.Criteria criteria1 = example.createCriteria();
+                        criteria1.andMeetingRoomIdEqualTo(room.getMeetingRoomId())
+                                .andMeetingDateEqualTo(startTime.toLocalDate())
+                                .andStartTimeLessThan(endTime.toLocalTime())
+                                .andEndTimeGreaterThan(startTime.toLocalTime());
+
+                        List<Reservation> conflictingReservations = reservationMapper.selectByExample(example);
+                        return conflictingReservations.isEmpty();
+                    })
+                    .collect(Collectors.toList());
     }
 } 

@@ -38,7 +38,7 @@ public class AuthController {
         User user = userService.getUserByUsername(request.getUsername());
         userService.updateLastLoginTime(user.getUserId());
         
-        return ResponseEntity.ok(new AuthResponse(jwt));
+        return ResponseEntity.ok(new AuthResponse(jwt, user.getUserId()));
     }
 
     @PostMapping("/register")
@@ -55,7 +55,7 @@ public class AuthController {
         final UserDetails userDetails = userService.loadUserByUsername(createdUser.getUsername());
         final String jwt = jwtUtils.generateToken(userDetails);
         
-        return ResponseEntity.ok(new AuthResponse(jwt));
+        return ResponseEntity.ok(new AuthResponse(jwt, createdUser.getUserId()));
     }
 
     @PostMapping("/validate")
@@ -90,8 +90,10 @@ class TokenValidationRequest {
 @Data
 class AuthResponse {
     private String token;
+    private Integer userId;
     
-    public AuthResponse(String token) {
+    public AuthResponse(String token, Integer userId) {
         this.token = token;
+        this.userId = userId;
     }
 } 
