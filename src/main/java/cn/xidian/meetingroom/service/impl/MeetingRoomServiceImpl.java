@@ -89,12 +89,14 @@ public class MeetingRoomServiceImpl implements MeetingRoomService {
                     if (endTime != null) {
                         ReservationExample.Criteria criteria1 = example.or();
                         criteria1.andMeetingRoomIdEqualTo(room.getMeetingRoomId())
-                                .andStartTimeLessThan(endTime);
+                                .andStartTimeLessThan(endTime)
+                                .andEndTimeGreaterThan(startTime);
                     }
                     if (startTime != null) {
                         ReservationExample.Criteria criteria2 = example.or();
                         criteria2.andMeetingRoomIdEqualTo(room.getMeetingRoomId())
-                                .andEndTimeGreaterThan(startTime);
+                                .andEndTimeGreaterThan(startTime)
+                                .andStartTimeLessThan(endTime);
                     }
 
                     List<Reservation> conflictingReservations = reservationMapper.selectByExample(example);
