@@ -7,10 +7,14 @@ import cn.xidian.meetingroom.service.LogService;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.time.LocalDateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Service
 public class LogServiceImpl implements LogService {
     
+    private final Logger logger = LoggerFactory.getLogger(LogServiceImpl.class);
+
     private final LogMapper logMapper;
 
     public LogServiceImpl(LogMapper logMapper) {
@@ -18,7 +22,7 @@ public class LogServiceImpl implements LogService {
     }
 
     @Override
-    public LogWithBLOBs getLogById(Integer logId) {
+    public LogWithBLOBs getLogById(Long logId) {
         return logMapper.selectByPrimaryKey(logId);
     }
 
@@ -58,8 +62,12 @@ public class LogServiceImpl implements LogService {
 
     @Override
     public void deleteOldLogs(int daysToKeep) {
+        if (daysToKeep <= 0) {
+            return;
+        }
+
         LocalDateTime cutoffDate = LocalDateTime.now().minusDays(daysToKeep);
-        
+        logger.info("Cutoff date: {}", cutoffDate);
         LogExample example = new LogExample();
         example.createCriteria().andCreatedTimeLessThan(cutoffDate);
         

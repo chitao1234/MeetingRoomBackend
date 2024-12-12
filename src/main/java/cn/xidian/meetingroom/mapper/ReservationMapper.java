@@ -11,7 +11,7 @@ public interface ReservationMapper {
 
     int deleteByExample(ReservationExample example);
 
-    int deleteByPrimaryKey(Integer reservationId);
+    int deleteByPrimaryKey(Long reservationId);
 
     int insert(ReservationWithBLOBs row);
 
@@ -21,7 +21,7 @@ public interface ReservationMapper {
 
     List<Reservation> selectByExample(ReservationExample example);
 
-    ReservationWithBLOBs selectByPrimaryKey(Integer reservationId);
+    ReservationWithBLOBs selectByPrimaryKey(Long reservationId);
 
     int updateByExampleSelective(@Param("row") ReservationWithBLOBs row, @Param("example") ReservationExample example);
 

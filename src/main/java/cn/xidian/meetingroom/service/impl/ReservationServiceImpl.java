@@ -20,7 +20,7 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public ReservationWithBLOBs getReservationById(Integer reservationId) {
+    public ReservationWithBLOBs getReservationById(Long reservationId) {
         return reservationMapper.selectByPrimaryKey(reservationId);
     }
 
@@ -57,7 +57,7 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public ReservationWithBLOBs updateReservation(Integer reservationId, ReservationWithBLOBs reservation) {
+    public ReservationWithBLOBs updateReservation(Long reservationId, ReservationWithBLOBs reservation) {
         Reservation existingReservation = reservationMapper.selectByPrimaryKey(reservationId);
         if (existingReservation == null) {
             return null;
@@ -71,12 +71,12 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public void deleteReservation(Integer reservationId) {
+    public void deleteReservation(Long reservationId) {
         reservationMapper.deleteByPrimaryKey(reservationId);
     }
 
     @Override
-    public ReservationWithBLOBs approveReservation(Integer reservationId) {
+    public ReservationWithBLOBs approveReservation(Long reservationId) {
         ReservationWithBLOBs reservation = new ReservationWithBLOBs();
         reservation.setReservationId(reservationId);
         reservation.setStatus("APPROVED");
@@ -86,7 +86,7 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public ReservationWithBLOBs rejectReservation(Integer reservationId, String rejectionReason) {
+    public ReservationWithBLOBs rejectReservation(Long reservationId, String rejectionReason) {
         ReservationWithBLOBs reservation = new ReservationWithBLOBs();
         reservation.setReservationId(reservationId);
         reservation.setStatus("REJECTED");

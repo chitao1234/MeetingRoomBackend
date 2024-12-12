@@ -115,52 +115,52 @@ public class ReservationExample {
             return (Criteria) this;
         }
 
-        public Criteria andReservationIdEqualTo(Integer value) {
+        public Criteria andReservationIdEqualTo(Long value) {
             addCriterion("reservation_id =", value, "reservationId");
             return (Criteria) this;
         }
 
-        public Criteria andReservationIdNotEqualTo(Integer value) {
+        public Criteria andReservationIdNotEqualTo(Long value) {
             addCriterion("reservation_id <>", value, "reservationId");
             return (Criteria) this;
         }
 
-        public Criteria andReservationIdGreaterThan(Integer value) {
+        public Criteria andReservationIdGreaterThan(Long value) {
             addCriterion("reservation_id >", value, "reservationId");
             return (Criteria) this;
         }
 
-        public Criteria andReservationIdGreaterThanOrEqualTo(Integer value) {
+        public Criteria andReservationIdGreaterThanOrEqualTo(Long value) {
             addCriterion("reservation_id >=", value, "reservationId");
             return (Criteria) this;
         }
 
-        public Criteria andReservationIdLessThan(Integer value) {
+        public Criteria andReservationIdLessThan(Long value) {
             addCriterion("reservation_id <", value, "reservationId");
             return (Criteria) this;
         }
 
-        public Criteria andReservationIdLessThanOrEqualTo(Integer value) {
+        public Criteria andReservationIdLessThanOrEqualTo(Long value) {
             addCriterion("reservation_id <=", value, "reservationId");
             return (Criteria) this;
         }
 
-        public Criteria andReservationIdIn(List<Integer> values) {
+        public Criteria andReservationIdIn(List<Long> values) {
             addCriterion("reservation_id in", values, "reservationId");
             return (Criteria) this;
         }
 
-        public Criteria andReservationIdNotIn(List<Integer> values) {
+        public Criteria andReservationIdNotIn(List<Long> values) {
             addCriterion("reservation_id not in", values, "reservationId");
             return (Criteria) this;
         }
 
-        public Criteria andReservationIdBetween(Integer value1, Integer value2) {
+        public Criteria andReservationIdBetween(Long value1, Long value2) {
             addCriterion("reservation_id between", value1, value2, "reservationId");
             return (Criteria) this;
         }
 
-        public Criteria andReservationIdNotBetween(Integer value1, Integer value2) {
+        public Criteria andReservationIdNotBetween(Long value1, Long value2) {
             addCriterion("reservation_id not between", value1, value2, "reservationId");
             return (Criteria) this;
         }

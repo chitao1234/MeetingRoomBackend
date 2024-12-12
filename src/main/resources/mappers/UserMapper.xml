@@ -7,10 +7,13 @@
     <result column="password" jdbcType="VARCHAR" property="password" />
     <result column="email" jdbcType="VARCHAR" property="email" />
     <result column="phone" jdbcType="VARCHAR" property="phone" />
-    <result column="role" jdbcType="VARCHAR" property="role" />
+    <result column="role" jdbcType="CHAR" property="role" />
     <result column="last_login_time" jdbcType="TIMESTAMP" property="lastLoginTime" />
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
     <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="cn.xidian.meetingroom.model.User">
+    <result column="avatar_url" jdbcType="LONGVARCHAR" property="avatarUrl" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -73,6 +76,25 @@
   <sql id="Base_Column_List">
     user_id, username, password, email, phone, role, last_login_time, created_time, updated_time
   </sql>
+  <sql id="Blob_Column_List">
+    avatar_url
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="cn.xidian.meetingroom.model.UserExample" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from User
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
   <select id="selectByExample" parameterType="cn.xidian.meetingroom.model.UserExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
@@ -87,9 +109,11 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
     select 
     <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
     from User
     where user_id = #{userId,jdbcType=INTEGER}
   </select>
@@ -109,10 +133,12 @@
     </selectKey>
     insert into User (username, password, email, 
       phone, role, last_login_time, 
-      created_time, updated_time)
+      created_time, updated_time, avatar_url
+      )
     values (#{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
-      #{phone,jdbcType=VARCHAR}, #{role,jdbcType=VARCHAR}, #{lastLoginTime,jdbcType=TIMESTAMP}, 
-      #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP})
+      #{phone,jdbcType=VARCHAR}, #{role,jdbcType=CHAR}, #{lastLoginTime,jdbcType=TIMESTAMP}, 
+      #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP}, #{avatarUrl,jdbcType=LONGVARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="cn.xidian.meetingroom.model.User">
     <selectKey keyProperty="userId" order="AFTER" resultType="java.lang.Integer">
@@ -144,6 +170,9 @@
       <if test="updatedTime != null">
         updated_time,
       </if>
+      <if test="avatarUrl != null">
+        avatar_url,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="username != null">
@@ -159,7 +188,7 @@
         #{phone,jdbcType=VARCHAR},
       </if>
       <if test="role != null">
-        #{role,jdbcType=VARCHAR},
+        #{role,jdbcType=CHAR},
       </if>
       <if test="lastLoginTime != null">
         #{lastLoginTime,jdbcType=TIMESTAMP},
@@ -169,6 +198,9 @@
       </if>
       <if test="updatedTime != null">
         #{updatedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="avatarUrl != null">
+        #{avatarUrl,jdbcType=LONGVARCHAR},
       </if>
     </trim>
   </insert>
@@ -197,7 +229,7 @@
         phone = #{row.phone,jdbcType=VARCHAR},
       </if>
       <if test="row.role != null">
-        role = #{row.role,jdbcType=VARCHAR},
+        role = #{row.role,jdbcType=CHAR},
       </if>
       <if test="row.lastLoginTime != null">
         last_login_time = #{row.lastLoginTime,jdbcType=TIMESTAMP},
@@ -208,7 +240,26 @@
       <if test="row.updatedTime != null">
         updated_time = #{row.updatedTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="row.avatarUrl != null">
+        avatar_url = #{row.avatarUrl,jdbcType=LONGVARCHAR},
+      </if>
     </set>
+    <if test="example != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update User
+    set user_id = #{row.userId,jdbcType=INTEGER},
+      username = #{row.username,jdbcType=VARCHAR},
+      password = #{row.password,jdbcType=VARCHAR},
+      email = #{row.email,jdbcType=VARCHAR},
+      phone = #{row.phone,jdbcType=VARCHAR},
+      role = #{row.role,jdbcType=CHAR},
+      last_login_time = #{row.lastLoginTime,jdbcType=TIMESTAMP},
+      created_time = #{row.createdTime,jdbcType=TIMESTAMP},
+      updated_time = #{row.updatedTime,jdbcType=TIMESTAMP},
+      avatar_url = #{row.avatarUrl,jdbcType=LONGVARCHAR}
     <if test="example != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -220,7 +271,7 @@
       password = #{row.password,jdbcType=VARCHAR},
       email = #{row.email,jdbcType=VARCHAR},
       phone = #{row.phone,jdbcType=VARCHAR},
-      role = #{row.role,jdbcType=VARCHAR},
+      role = #{row.role,jdbcType=CHAR},
       last_login_time = #{row.lastLoginTime,jdbcType=TIMESTAMP},
       created_time = #{row.createdTime,jdbcType=TIMESTAMP},
       updated_time = #{row.updatedTime,jdbcType=TIMESTAMP}
@@ -244,7 +295,7 @@
         phone = #{phone,jdbcType=VARCHAR},
       </if>
       <if test="role != null">
-        role = #{role,jdbcType=VARCHAR},
+        role = #{role,jdbcType=CHAR},
       </if>
       <if test="lastLoginTime != null">
         last_login_time = #{lastLoginTime,jdbcType=TIMESTAMP},
@@ -255,7 +306,23 @@
       <if test="updatedTime != null">
         updated_time = #{updatedTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="avatarUrl != null">
+        avatar_url = #{avatarUrl,jdbcType=LONGVARCHAR},
+      </if>
     </set>
+    where user_id = #{userId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="cn.xidian.meetingroom.model.User">
+    update User
+    set username = #{username,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      role = #{role,jdbcType=CHAR},
+      last_login_time = #{lastLoginTime,jdbcType=TIMESTAMP},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      updated_time = #{updatedTime,jdbcType=TIMESTAMP},
+      avatar_url = #{avatarUrl,jdbcType=LONGVARCHAR}
     where user_id = #{userId,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="cn.xidian.meetingroom.model.User">
@@ -264,7 +331,7 @@
       password = #{password,jdbcType=VARCHAR},
       email = #{email,jdbcType=VARCHAR},
       phone = #{phone,jdbcType=VARCHAR},
-      role = #{role,jdbcType=VARCHAR},
+      role = #{role,jdbcType=CHAR},
       last_login_time = #{lastLoginTime,jdbcType=TIMESTAMP},
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       updated_time = #{updatedTime,jdbcType=TIMESTAMP}

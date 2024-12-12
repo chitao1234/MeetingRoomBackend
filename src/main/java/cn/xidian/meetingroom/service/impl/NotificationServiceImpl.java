@@ -18,7 +18,7 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public Notification getNotificationById(Integer notificationId) {
+    public Notification getNotificationById(Long notificationId) {
         return notificationMapper.selectByPrimaryKey(notificationId);
     }
 
@@ -33,7 +33,7 @@ public class NotificationServiceImpl implements NotificationService {
     public List<Notification> getUnreadNotifications(Integer userId) {
         NotificationExample example = new NotificationExample();
         example.createCriteria()
-            .andUserIdEqualTo(userId.intValue())
+            .andUserIdEqualTo(userId)
             .andIsReadEqualTo(false);
         return notificationMapper.selectByExample(example);
     }
@@ -47,7 +47,7 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public void markAsRead(Integer notificationId) {
+    public void markAsRead(Long notificationId) {
         Notification notification = new Notification();
         notification.setNotificationId(notificationId);
         notification.setIsRead(true);
@@ -59,7 +59,7 @@ public class NotificationServiceImpl implements NotificationService {
     public void markAllAsRead(Integer userId) {
         NotificationExample example = new NotificationExample();
         example.createCriteria()
-            .andUserIdEqualTo(userId.intValue())
+            .andUserIdEqualTo(userId)
             .andIsReadEqualTo(false);
         
         Notification notification = new Notification();
@@ -70,7 +70,7 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public void deleteNotification(Integer notificationId) {
+    public void deleteNotification(Long notificationId) {
         notificationMapper.deleteByPrimaryKey(notificationId);
     }
 

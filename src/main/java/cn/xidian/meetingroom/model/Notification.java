@@ -3,7 +3,7 @@ package cn.xidian.meetingroom.model;
 import java.time.LocalDateTime;
 
 public class Notification {
-    private Integer notificationId;
+    private Long notificationId;
 
     private Integer userId;
 
@@ -17,11 +17,11 @@ public class Notification {
 
     private String content;
 
-    public Integer getNotificationId() {
+    public Long getNotificationId() {
         return notificationId;
     }
 
-    public void setNotificationId(Integer notificationId) {
+    public void setNotificationId(Long notificationId) {
         this.notificationId = notificationId;
     }
 

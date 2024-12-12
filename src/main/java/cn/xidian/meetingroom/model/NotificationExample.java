@@ -115,52 +115,52 @@ public class NotificationExample {
             return (Criteria) this;
         }
 
-        public Criteria andNotificationIdEqualTo(Integer value) {
+        public Criteria andNotificationIdEqualTo(Long value) {
             addCriterion("notification_id =", value, "notificationId");
             return (Criteria) this;
         }
 
-        public Criteria andNotificationIdNotEqualTo(Integer value) {
+        public Criteria andNotificationIdNotEqualTo(Long value) {
             addCriterion("notification_id <>", value, "notificationId");
             return (Criteria) this;
         }
 
-        public Criteria andNotificationIdGreaterThan(Integer value) {
+        public Criteria andNotificationIdGreaterThan(Long value) {
             addCriterion("notification_id >", value, "notificationId");
             return (Criteria) this;
         }
 
-        public Criteria andNotificationIdGreaterThanOrEqualTo(Integer value) {
+        public Criteria andNotificationIdGreaterThanOrEqualTo(Long value) {
             addCriterion("notification_id >=", value, "notificationId");
             return (Criteria) this;
         }
 
-        public Criteria andNotificationIdLessThan(Integer value) {
+        public Criteria andNotificationIdLessThan(Long value) {
             addCriterion("notification_id <", value, "notificationId");
             return (Criteria) this;
         }
 
-        public Criteria andNotificationIdLessThanOrEqualTo(Integer value) {
+        public Criteria andNotificationIdLessThanOrEqualTo(Long value) {
             addCriterion("notification_id <=", value, "notificationId");
             return (Criteria) this;
         }
 
-        public Criteria andNotificationIdIn(List<Integer> values) {
+        public Criteria andNotificationIdIn(List<Long> values) {
             addCriterion("notification_id in", values, "notificationId");
             return (Criteria) this;
         }
 
-        public Criteria andNotificationIdNotIn(List<Integer> values) {
+        public Criteria andNotificationIdNotIn(List<Long> values) {
             addCriterion("notification_id not in", values, "notificationId");
             return (Criteria) this;
         }
 
-        public Criteria andNotificationIdBetween(Integer value1, Integer value2) {
+        public Criteria andNotificationIdBetween(Long value1, Long value2) {
             addCriterion("notification_id between", value1, value2, "notificationId");
             return (Criteria) this;
         }
 
-        public Criteria andNotificationIdNotBetween(Integer value1, Integer value2) {
+        public Criteria andNotificationIdNotBetween(Long value1, Long value2) {
             addCriterion("notification_id not between", value1, value2, "notificationId");
             return (Criteria) this;
         }

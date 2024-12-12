@@ -11,7 +11,7 @@ public interface LogMapper {
 
     int deleteByExample(LogExample example);
 
-    int deleteByPrimaryKey(Integer logId);
+    int deleteByPrimaryKey(Long logId);
 
     int insert(LogWithBLOBs row);
 
@@ -21,7 +21,7 @@ public interface LogMapper {
 
     List<Log> selectByExample(LogExample example);
 
-    LogWithBLOBs selectByPrimaryKey(Integer logId);
+    LogWithBLOBs selectByPrimaryKey(Long logId);
 
     int updateByExampleSelective(@Param("row") LogWithBLOBs row, @Param("example") LogExample example);
 

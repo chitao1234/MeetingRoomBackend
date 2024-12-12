@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.xidian.meetingroom.mapper.NotificationMapper">
   <resultMap id="BaseResultMap" type="cn.xidian.meetingroom.model.Notification">
-    <id column="notification_id" jdbcType="INTEGER" property="notificationId" />
+    <id column="notification_id" jdbcType="BIGINT" property="notificationId" />
     <result column="user_id" jdbcType="INTEGER" property="userId" />
     <result column="type" jdbcType="VARCHAR" property="type" />
     <result column="is_read" jdbcType="BIT" property="isRead" />
@@ -106,17 +106,17 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
     select 
     <include refid="Base_Column_List" />
     ,
     <include refid="Blob_Column_List" />
     from Notification
-    where notification_id = #{notificationId,jdbcType=INTEGER}
+    where notification_id = #{notificationId,jdbcType=BIGINT}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from Notification
-    where notification_id = #{notificationId,jdbcType=INTEGER}
+    where notification_id = #{notificationId,jdbcType=BIGINT}
   </delete>
   <delete id="deleteByExample" parameterType="cn.xidian.meetingroom.model.NotificationExample">
     delete from Notification
@@ -125,7 +125,7 @@
     </if>
   </delete>
   <insert id="insert" parameterType="cn.xidian.meetingroom.model.Notification">
-    <selectKey keyProperty="notificationId" order="AFTER" resultType="java.lang.Integer">
+    <selectKey keyProperty="notificationId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into Notification (user_id, type, is_read, 
@@ -136,7 +136,7 @@
       )
   </insert>
   <insert id="insertSelective" parameterType="cn.xidian.meetingroom.model.Notification">
-    <selectKey keyProperty="notificationId" order="AFTER" resultType="java.lang.Integer">
+    <selectKey keyProperty="notificationId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into Notification
@@ -191,7 +191,7 @@
     update Notification
     <set>
       <if test="row.notificationId != null">
-        notification_id = #{row.notificationId,jdbcType=INTEGER},
+        notification_id = #{row.notificationId,jdbcType=BIGINT},
       </if>
       <if test="row.userId != null">
         user_id = #{row.userId,jdbcType=INTEGER},
@@ -218,7 +218,7 @@
   </update>
   <update id="updateByExampleWithBLOBs" parameterType="map">
     update Notification
-    set notification_id = #{row.notificationId,jdbcType=INTEGER},
+    set notification_id = #{row.notificationId,jdbcType=BIGINT},
       user_id = #{row.userId,jdbcType=INTEGER},
       type = #{row.type,jdbcType=VARCHAR},
       is_read = #{row.isRead,jdbcType=BIT},
@@ -231,7 +231,7 @@
   </update>
   <update id="updateByExample" parameterType="map">
     update Notification
-    set notification_id = #{row.notificationId,jdbcType=INTEGER},
+    set notification_id = #{row.notificationId,jdbcType=BIGINT},
       user_id = #{row.userId,jdbcType=INTEGER},
       type = #{row.type,jdbcType=VARCHAR},
       is_read = #{row.isRead,jdbcType=BIT},
@@ -263,7 +263,7 @@
         content = #{content,jdbcType=LONGVARCHAR},
       </if>
     </set>
-    where notification_id = #{notificationId,jdbcType=INTEGER}
+    where notification_id = #{notificationId,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="cn.xidian.meetingroom.model.Notification">
     update Notification
@@ -273,7 +273,7 @@
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       updated_time = #{updatedTime,jdbcType=TIMESTAMP},
       content = #{content,jdbcType=LONGVARCHAR}
-    where notification_id = #{notificationId,jdbcType=INTEGER}
+    where notification_id = #{notificationId,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="cn.xidian.meetingroom.model.Notification">
     update Notification
@@ -282,6 +282,6 @@
       is_read = #{isRead,jdbcType=BIT},
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       updated_time = #{updatedTime,jdbcType=TIMESTAMP}
-    where notification_id = #{notificationId,jdbcType=INTEGER}
+    where notification_id = #{notificationId,jdbcType=BIGINT}
   </update>
 </mapper>

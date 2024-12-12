@@ -13,10 +13,14 @@ import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Service
 public class MeetingRoomServiceImpl implements MeetingRoomService {
     
+    private final Logger logger = LoggerFactory.getLogger(MeetingRoomServiceImpl.class);
+
     private final MeetingRoomMapper meetingRoomMapper;
     private final ReservationMapper reservationMapper;
 
@@ -68,7 +72,7 @@ public class MeetingRoomServiceImpl implements MeetingRoomService {
         // Get all meeting rooms that meet the capacity requirement
         List<MeetingRoomWithBLOBs> allRooms = null;
         if (minCapacity != null) {
-            System.out.println("minCapacity: " + minCapacity);
+            logger.info("minCapacity: {}", minCapacity);
             MeetingRoomExample example = new MeetingRoomExample();
             example.createCriteria().andCapacityGreaterThanOrEqualTo(minCapacity);
             allRooms = meetingRoomMapper.selectByExampleWithBLOBs(example);
@@ -77,7 +81,7 @@ public class MeetingRoomServiceImpl implements MeetingRoomService {
         }
 
         // log the allRooms
-        System.out.println("allRooms: " + allRooms);
+        logger.info("allRooms: {}", allRooms);
 
         return allRooms.stream()
                 .filter(room -> {
@@ -100,9 +104,9 @@ public class MeetingRoomServiceImpl implements MeetingRoomService {
                     }
 
                     List<Reservation> conflictingReservations = reservationMapper.selectByExample(example);
-                    System.out.println("conflictingReservations: " + conflictingReservations);
+                    logger.info("conflictingReservations: {}", conflictingReservations);
                     return conflictingReservations.isEmpty();
                 })
-                .collect(Collectors.toList());
+                .toList();
     }
 } 

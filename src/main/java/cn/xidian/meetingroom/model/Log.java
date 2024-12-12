@@ -3,7 +3,7 @@ package cn.xidian.meetingroom.model;
 import java.time.LocalDateTime;
 
 public class Log {
-    private Integer logId;
+    private Long logId;
 
     private Integer userId;
 
@@ -11,11 +11,11 @@ public class Log {
 
     private LocalDateTime createdTime;
 
-    public Integer getLogId() {
+    public Long getLogId() {
         return logId;
     }
 
-    public void setLogId(Integer logId) {
+    public void setLogId(Long logId) {
         this.logId = logId;
     }
 

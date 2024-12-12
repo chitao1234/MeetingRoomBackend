@@ -21,6 +21,8 @@ public class User {
 
     private LocalDateTime updatedTime;
 
+    private String avatarUrl;
+
     public Integer getUserId() {
         return userId;
     }
@@ -91,5 +93,13 @@ public class User {
 
     public void setUpdatedTime(LocalDateTime updatedTime) {
         this.updatedTime = updatedTime;
+    }
+
+    public String getAvatarUrl() {
+        return avatarUrl;
+    }
+
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl == null ? null : avatarUrl.trim();
     }
 }

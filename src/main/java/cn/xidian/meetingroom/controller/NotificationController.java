@@ -18,7 +18,7 @@ public class NotificationController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Notification> getNotification(@PathVariable("id") Integer notificationId) {
+    public ResponseEntity<Notification> getNotification(@PathVariable("id") Long notificationId) {
         Notification notification = notificationService.getNotificationById(notificationId);
         if (notification == null) {
             return ResponseEntity.notFound().build();
@@ -43,7 +43,7 @@ public class NotificationController {
     }
 
     @PutMapping("/{id}/read")
-    public ResponseEntity<Void> markAsRead(@PathVariable("id") Integer notificationId) {
+    public ResponseEntity<Void> markAsRead(@PathVariable("id") Long notificationId) {
         notificationService.markAsRead(notificationId);
         return ResponseEntity.ok().build();
     }
@@ -55,7 +55,7 @@ public class NotificationController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteNotification(@PathVariable("id") Integer notificationId) {
+    public ResponseEntity<Void> deleteNotification(@PathVariable("id") Long notificationId) {
         notificationService.deleteNotification(notificationId);
         return ResponseEntity.noContent().build();
     }

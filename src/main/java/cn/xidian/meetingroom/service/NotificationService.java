@@ -4,11 +4,11 @@ import cn.xidian.meetingroom.model.Notification;
 import java.util.List;
 
 public interface NotificationService {
-    Notification getNotificationById(Integer notificationId);
+    Notification getNotificationById(Long notificationId);
     List<Notification> getNotificationsByUserId(Integer userId);
     List<Notification> getUnreadNotifications(Integer userId);
     Notification createNotification(Notification notification);
-    void markAsRead(Integer notificationId);
+    void markAsRead(Long notificationId);
     void markAllAsRead(Integer userId);
-    void deleteNotification(Integer notificationId);
-} 
+    void deleteNotification(Long notificationId);
+}

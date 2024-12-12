@@ -1,5 +1,6 @@
 package cn.xidian.meetingroom.model;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public class MeetingRoom {
@@ -11,7 +12,7 @@ public class MeetingRoom {
 
     private Integer capacity;
 
-    private Long area;
+    private BigDecimal area;
 
     private LocalDateTime createdTime;
 
@@ -49,11 +50,11 @@ public class MeetingRoom {
         this.capacity = capacity;
     }
 
-    public Long getArea() {
+    public BigDecimal getArea() {
         return area;
     }
 
-    public void setArea(Long area) {
+    public void setArea(BigDecimal area) {
         this.area = area;
     }
 

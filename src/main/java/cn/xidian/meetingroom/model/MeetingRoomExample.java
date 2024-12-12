@@ -1,5 +1,6 @@
 package cn.xidian.meetingroom.model;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -375,52 +376,52 @@ public class MeetingRoomExample {
             return (Criteria) this;
         }
 
-        public Criteria andAreaEqualTo(Long value) {
+        public Criteria andAreaEqualTo(BigDecimal value) {
             addCriterion("area =", value, "area");
             return (Criteria) this;
         }
 
-        public Criteria andAreaNotEqualTo(Long value) {
+        public Criteria andAreaNotEqualTo(BigDecimal value) {
             addCriterion("area <>", value, "area");
             return (Criteria) this;
         }
 
-        public Criteria andAreaGreaterThan(Long value) {
+        public Criteria andAreaGreaterThan(BigDecimal value) {
             addCriterion("area >", value, "area");
             return (Criteria) this;
         }
 
-        public Criteria andAreaGreaterThanOrEqualTo(Long value) {
+        public Criteria andAreaGreaterThanOrEqualTo(BigDecimal value) {
             addCriterion("area >=", value, "area");
             return (Criteria) this;
         }
 
-        public Criteria andAreaLessThan(Long value) {
+        public Criteria andAreaLessThan(BigDecimal value) {
             addCriterion("area <", value, "area");
             return (Criteria) this;
         }
 
-        public Criteria andAreaLessThanOrEqualTo(Long value) {
+        public Criteria andAreaLessThanOrEqualTo(BigDecimal value) {
             addCriterion("area <=", value, "area");
             return (Criteria) this;
         }
 
-        public Criteria andAreaIn(List<Long> values) {
+        public Criteria andAreaIn(List<BigDecimal> values) {
             addCriterion("area in", values, "area");
             return (Criteria) this;
         }
 
-        public Criteria andAreaNotIn(List<Long> values) {
+        public Criteria andAreaNotIn(List<BigDecimal> values) {
             addCriterion("area not in", values, "area");
             return (Criteria) this;
         }
 
-        public Criteria andAreaBetween(Long value1, Long value2) {
+        public Criteria andAreaBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("area between", value1, value2, "area");
             return (Criteria) this;
         }
 
-        public Criteria andAreaNotBetween(Long value1, Long value2) {
+        public Criteria andAreaNotBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("area not between", value1, value2, "area");
             return (Criteria) this;
         }

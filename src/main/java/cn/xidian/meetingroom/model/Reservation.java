@@ -3,7 +3,7 @@ package cn.xidian.meetingroom.model;
 import java.time.LocalDateTime;
 
 public class Reservation {
-    private Integer reservationId;
+    private Long reservationId;
 
     private Integer userId;
 
@@ -23,11 +23,11 @@ public class Reservation {
 
     private LocalDateTime approvalTime;
 
-    public Integer getReservationId() {
+    public Long getReservationId() {
         return reservationId;
     }
 
-    public void setReservationId(Integer reservationId) {
+    public void setReservationId(Long reservationId) {
         this.reservationId = reservationId;
     }
 

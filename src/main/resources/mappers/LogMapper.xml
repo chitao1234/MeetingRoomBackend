@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.xidian.meetingroom.mapper.LogMapper">
   <resultMap id="BaseResultMap" type="cn.xidian.meetingroom.model.Log">
-    <id column="log_id" jdbcType="INTEGER" property="logId" />
+    <id column="log_id" jdbcType="BIGINT" property="logId" />
     <result column="user_id" jdbcType="INTEGER" property="userId" />
     <result column="operation_type" jdbcType="VARCHAR" property="operationType" />
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
@@ -105,17 +105,17 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
     select 
     <include refid="Base_Column_List" />
     ,
     <include refid="Blob_Column_List" />
     from Log
-    where log_id = #{logId,jdbcType=INTEGER}
+    where log_id = #{logId,jdbcType=BIGINT}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from Log
-    where log_id = #{logId,jdbcType=INTEGER}
+    where log_id = #{logId,jdbcType=BIGINT}
   </delete>
   <delete id="deleteByExample" parameterType="cn.xidian.meetingroom.model.LogExample">
     delete from Log
@@ -124,7 +124,7 @@
     </if>
   </delete>
   <insert id="insert" parameterType="cn.xidian.meetingroom.model.LogWithBLOBs">
-    <selectKey keyProperty="logId" order="AFTER" resultType="java.lang.Integer">
+    <selectKey keyProperty="logId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into Log (user_id, operation_type, created_time, 
@@ -133,7 +133,7 @@
       #{operationDetails,jdbcType=LONGVARCHAR}, #{ipAddress,jdbcType=VARBINARY})
   </insert>
   <insert id="insertSelective" parameterType="cn.xidian.meetingroom.model.LogWithBLOBs">
-    <selectKey keyProperty="logId" order="AFTER" resultType="java.lang.Integer">
+    <selectKey keyProperty="logId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into Log
@@ -182,7 +182,7 @@
     update Log
     <set>
       <if test="row.logId != null">
-        log_id = #{row.logId,jdbcType=INTEGER},
+        log_id = #{row.logId,jdbcType=BIGINT},
       </if>
       <if test="row.userId != null">
         user_id = #{row.userId,jdbcType=INTEGER},
@@ -206,7 +206,7 @@
   </update>
   <update id="updateByExampleWithBLOBs" parameterType="map">
     update Log
-    set log_id = #{row.logId,jdbcType=INTEGER},
+    set log_id = #{row.logId,jdbcType=BIGINT},
       user_id = #{row.userId,jdbcType=INTEGER},
       operation_type = #{row.operationType,jdbcType=VARCHAR},
       created_time = #{row.createdTime,jdbcType=TIMESTAMP},
@@ -218,7 +218,7 @@
   </update>
   <update id="updateByExample" parameterType="map">
     update Log
-    set log_id = #{row.logId,jdbcType=INTEGER},
+    set log_id = #{row.logId,jdbcType=BIGINT},
       user_id = #{row.userId,jdbcType=INTEGER},
       operation_type = #{row.operationType,jdbcType=VARCHAR},
       created_time = #{row.createdTime,jdbcType=TIMESTAMP}
@@ -245,7 +245,7 @@
         ip_address = #{ipAddress,jdbcType=VARBINARY},
       </if>
     </set>
-    where log_id = #{logId,jdbcType=INTEGER}
+    where log_id = #{logId,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="cn.xidian.meetingroom.model.LogWithBLOBs">
     update Log
@@ -254,13 +254,13 @@
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       operation_details = #{operationDetails,jdbcType=LONGVARCHAR},
       ip_address = #{ipAddress,jdbcType=VARBINARY}
-    where log_id = #{logId,jdbcType=INTEGER}
+    where log_id = #{logId,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="cn.xidian.meetingroom.model.Log">
     update Log
     set user_id = #{userId,jdbcType=INTEGER},
       operation_type = #{operationType,jdbcType=VARCHAR},
       created_time = #{createdTime,jdbcType=TIMESTAMP}
-    where log_id = #{logId,jdbcType=INTEGER}
+    where log_id = #{logId,jdbcType=BIGINT}
   </update>
 </mapper>

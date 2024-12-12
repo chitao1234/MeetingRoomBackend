@@ -20,7 +20,7 @@ public class ReservationController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ReservationWithBLOBs> getReservation(@PathVariable("id") Integer reservationId) {
+    public ResponseEntity<ReservationWithBLOBs> getReservation(@PathVariable("id") Long reservationId) {
         ReservationWithBLOBs reservation = reservationService.getReservationById(reservationId);
         if (reservation == null) {
             return ResponseEntity.notFound().build();
@@ -52,7 +52,7 @@ public class ReservationController {
 
     @PutMapping("/{id}")
     public ResponseEntity<ReservationWithBLOBs> updateReservation(
-            @PathVariable("id") Integer reservationId,
+            @PathVariable("id") Long reservationId,
             @RequestBody ReservationWithBLOBs reservation) {
         ReservationWithBLOBs updatedReservation = reservationService.updateReservation(reservationId, reservation);
         if (updatedReservation == null) {
@@ -62,13 +62,13 @@ public class ReservationController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteReservation(@PathVariable("id") Integer reservationId) {
+    public ResponseEntity<Void> deleteReservation(@PathVariable("id") Long reservationId) {
         reservationService.deleteReservation(reservationId);
         return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/{id}/approve")
-    public ResponseEntity<ReservationWithBLOBs> approveReservation(@PathVariable("id") Integer reservationId) {
+    public ResponseEntity<ReservationWithBLOBs> approveReservation(@PathVariable("id") Long reservationId) {
         ReservationWithBLOBs reservation = reservationService.approveReservation(reservationId);
         if (reservation == null) {
             return ResponseEntity.notFound().build();
@@ -78,7 +78,7 @@ public class ReservationController {
 
     @PostMapping("/{id}/reject")
     public ResponseEntity<ReservationWithBLOBs> rejectReservation(
-            @PathVariable("id") Integer reservationId,
+            @PathVariable("id") Long reservationId,
             @RequestParam String reason) {
         ReservationWithBLOBs reservation = reservationService.rejectReservation(reservationId, reason);
         if (reservation == null) {
