@@ -2,6 +2,7 @@ package cn.xidian.meetingroom.controller;
 
 import cn.xidian.meetingroom.model.Notification;
 import cn.xidian.meetingroom.service.NotificationService;
+import cn.xidian.meetingroom.util.IpUtil;
 import cn.xidian.meetingroom.service.LogService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -59,7 +60,7 @@ public class NotificationController {
             // Create audit log
             String details = String.format("Marked notification %d as read", notificationId);
             logService.createLog(notification.getUserId(), "MARK_NOTIFICATION_READ", details, 
-                request.getRemoteAddr().getBytes());
+                IpUtil.getIpAddressBytes(request));
         }
         return ResponseEntity.ok().build();
     }
@@ -71,7 +72,7 @@ public class NotificationController {
         // Create audit log
         String details = String.format("Marked all notifications as read for user %d", userId);
         logService.createLog(userId, "MARK_ALL_NOTIFICATIONS_READ", details, 
-            request.getRemoteAddr().getBytes());
+            IpUtil.getIpAddressBytes(request));
 
         return ResponseEntity.ok().build();
     }
@@ -83,7 +84,7 @@ public class NotificationController {
             // Create audit log before deletion
             String details = String.format("Deleted notification %d", notificationId);
             logService.createLog(notification.getUserId(), "DELETE_NOTIFICATION", details, 
-                request.getRemoteAddr().getBytes());
+                IpUtil.getIpAddressBytes(request));
         }
 
         notificationService.deleteNotification(notificationId);

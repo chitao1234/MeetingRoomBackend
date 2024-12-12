@@ -73,4 +73,9 @@ public class LogServiceImpl implements LogService {
         
         logMapper.deleteByExample(example);
     }
+
+    @Override
+    public List<LogWithBLOBs> getAllLogs() {
+        return logMapper.selectByExampleWithBLOBs(new LogExample());
+    }
 } 

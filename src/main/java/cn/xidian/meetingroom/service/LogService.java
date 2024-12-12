@@ -12,4 +12,5 @@ public interface LogService {
     List<LogWithBLOBs> getLogsByOperationType(String operationType);
     LogWithBLOBs createLog(Integer userId, String operationType, String operationDetails, byte[] ipAddress);
     void deleteOldLogs(int daysToKeep);
+    List<LogWithBLOBs> getAllLogs();
 } 

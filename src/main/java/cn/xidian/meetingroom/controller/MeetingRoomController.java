@@ -4,6 +4,8 @@ import cn.xidian.meetingroom.model.MeetingRoomWithBLOBs;
 import cn.xidian.meetingroom.service.MeetingRoomService;
 import cn.xidian.meetingroom.service.LogService;
 import cn.xidian.meetingroom.service.UserService;
+import cn.xidian.meetingroom.util.IpUtil;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -53,7 +55,7 @@ public class MeetingRoomController extends BaseController {
         // Create audit log
         String details = String.format("Created new meeting room: %s", createdRoom.getName());
         logService.createLog(getCurrentUserId(), "CREATE_MEETING_ROOM", details, 
-            request.getRemoteAddr().getBytes());
+            IpUtil.getIpAddressBytes(request));
 
         return ResponseEntity.status(HttpStatus.CREATED).body(createdRoom);
     }
@@ -70,7 +72,7 @@ public class MeetingRoomController extends BaseController {
         // Create audit log
         String details = String.format("Updated meeting room: %s", updatedRoom.getName());
         logService.createLog(getCurrentUserId(), "UPDATE_MEETING_ROOM", details, 
-            request.getRemoteAddr().getBytes());
+            IpUtil.getIpAddressBytes(request));
 
         return ResponseEntity.ok(updatedRoom);
     }
@@ -82,7 +84,7 @@ public class MeetingRoomController extends BaseController {
             // Create audit log before deletion
             String details = String.format("Deleted meeting room: %s", room.getName());
             logService.createLog(getCurrentUserId(), "DELETE_MEETING_ROOM", details, 
-                request.getRemoteAddr().getBytes());
+                IpUtil.getIpAddressBytes(request));
         }
 
         meetingRoomService.deleteMeetingRoom(meetingRoomId);

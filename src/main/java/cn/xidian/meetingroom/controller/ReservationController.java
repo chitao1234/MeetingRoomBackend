@@ -6,6 +6,7 @@ import cn.xidian.meetingroom.service.NotificationService;
 import cn.xidian.meetingroom.model.Notification;
 import cn.xidian.meetingroom.model.User;
 import cn.xidian.meetingroom.service.UserService;
+import cn.xidian.meetingroom.util.IpUtil;
 import cn.xidian.meetingroom.service.LogService;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -99,7 +100,7 @@ public class ReservationController extends BaseController {
         String details = String.format("Created reservation for room %d by user %d", 
             createdReservation.getMeetingRoomId(), getCurrentUserId());
         logService.createLog(getCurrentUserId(), "CREATE_RESERVATION", details, 
-            request.getRemoteAddr().getBytes());
+            IpUtil.getIpAddressBytes(request));
         
         return ResponseEntity.status(HttpStatus.CREATED).body(createdReservation);
     }
@@ -126,7 +127,7 @@ public class ReservationController extends BaseController {
         String details = String.format("Updated reservation %d for room %d by user %d", 
             reservationId, updatedReservation.getMeetingRoomId(), getCurrentUserId());
         logService.createLog(getCurrentUserId(), "UPDATE_RESERVATION", details, 
-            request.getRemoteAddr().getBytes());
+            IpUtil.getIpAddressBytes(request));
 
         return ResponseEntity.ok(updatedReservation);
     }
@@ -139,7 +140,7 @@ public class ReservationController extends BaseController {
             String details = String.format("Deleted reservation %d for room %d by user %d", 
                 reservationId, reservation.getMeetingRoomId(), getCurrentUserId());
             logService.createLog(getCurrentUserId(), "DELETE_RESERVATION", details, 
-                request.getRemoteAddr().getBytes());
+                IpUtil.getIpAddressBytes(request));
         }
         
         reservationService.deleteReservation(reservationId);
@@ -166,7 +167,7 @@ public class ReservationController extends BaseController {
         String details = String.format("Approved reservation %d for room %d by user %d", 
             reservationId, reservation.getMeetingRoomId(), getCurrentUserId());
         logService.createLog(getCurrentUserId(), "APPROVE_RESERVATION", details, 
-            request.getRemoteAddr().getBytes());
+        IpUtil.getIpAddressBytes(request));
 
         return ResponseEntity.ok(reservation);
     }
@@ -193,7 +194,7 @@ public class ReservationController extends BaseController {
         String details = String.format("Rejected reservation %d for room %d by user %d. Reason: %s", 
             reservationId, reservation.getMeetingRoomId(), getCurrentUserId(), reason);
         logService.createLog(getCurrentUserId(), "REJECT_RESERVATION", details, 
-            request.getRemoteAddr().getBytes());
+            IpUtil.getIpAddressBytes(request));
 
         return ResponseEntity.ok(reservation);
     }

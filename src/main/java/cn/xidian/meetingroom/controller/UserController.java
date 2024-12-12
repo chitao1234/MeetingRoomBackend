@@ -2,6 +2,7 @@ package cn.xidian.meetingroom.controller;
 
 import cn.xidian.meetingroom.model.User;
 import cn.xidian.meetingroom.service.UserService;
+import cn.xidian.meetingroom.util.IpUtil;
 import cn.xidian.meetingroom.service.LogService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -54,7 +55,7 @@ public class UserController extends BaseController {
         String details = String.format("Created new user: %s with role %s", 
             createdUser.getUsername(), createdUser.getRole());
         logService.createLog(getCurrentUserId(), "CREATE_USER", details, 
-            request.getRemoteAddr().getBytes());
+            IpUtil.getIpAddressBytes(request));
 
         return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
     }
@@ -69,7 +70,7 @@ public class UserController extends BaseController {
         // Create audit log
         String details = String.format("Updated user: %s", updatedUser.getUsername());
         logService.createLog(getCurrentUserId(), "UPDATE_USER", details, 
-            request.getRemoteAddr().getBytes());
+        IpUtil.getIpAddressBytes(request));
 
         return ResponseEntity.ok(updatedUser);
     }
@@ -81,7 +82,7 @@ public class UserController extends BaseController {
             // Create audit log before deletion
             String details = String.format("Deleted user: %s", user.getUsername());
             logService.createLog(getCurrentUserId(), "DELETE_USER", details, 
-                request.getRemoteAddr().getBytes());
+                IpUtil.getIpAddressBytes(request));
         }
         
         userService.deleteUser(userId);
