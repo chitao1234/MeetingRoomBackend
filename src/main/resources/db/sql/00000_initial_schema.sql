@@ -50,7 +50,7 @@ CREATE TABLE Log (
 CREATE TABLE Notification (
     notification_id BIGINT NOT NULL AUTO_INCREMENT,
     user_id INT NOT NULL,
-    type VARCHAR(50) NOT NULL,
+    title VARCHAR(255) NOT NULL,
     content TEXT NOT NULL,
     is_read BOOLEAN NOT NULL DEFAULT FALSE,
     created_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,

@@ -4,8 +4,6 @@ import cn.xidian.meetingroom.mapper.UserMapper;
 import cn.xidian.meetingroom.model.User;
 import cn.xidian.meetingroom.model.UserExample;
 import cn.xidian.meetingroom.service.UserService;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -20,24 +18,6 @@ public class UserServiceImpl implements UserService {
     public UserServiceImpl(UserMapper userMapper, PasswordEncoder passwordEncoder) {
         this.userMapper = userMapper;
         this.passwordEncoder = passwordEncoder;
-    }
-
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserExample example = new UserExample();
-        example.createCriteria().andUsernameEqualTo(username);
-        List<User> users = userMapper.selectByExample(example);
-        
-        if (users.isEmpty()) {
-            throw new UsernameNotFoundException("User not found with username: " + username);
-        }
-
-        User user = users.get(0);
-        return org.springframework.security.core.userdetails.User
-                .withUsername(user.getUsername())
-                .password(user.getPassword())
-                .roles(user.getRole())
-                .build();
     }
 
     @Override
@@ -107,5 +87,12 @@ public class UserServiceImpl implements UserService {
         user.setUserId(userId);
         user.setLastLoginTime(LocalDateTime.now());
         userMapper.updateByPrimaryKeySelective(user);
+    }
+
+    @Override
+    public List<User> getAllAdmins() {
+        UserExample example = new UserExample();
+        example.createCriteria().andRoleEqualTo("ADMIN");
+        return userMapper.selectByExample(example);
     }
 } 

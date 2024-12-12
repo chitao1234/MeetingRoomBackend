@@ -1,8 +1,10 @@
 package cn.xidian.meetingroom.controller;
 
 import cn.xidian.meetingroom.model.User;
+import cn.xidian.meetingroom.security.CustomUserDetailsService;
 import cn.xidian.meetingroom.security.JwtUtils;
 import cn.xidian.meetingroom.service.UserService;
+import cn.xidian.meetingroom.service.LogService;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,21 +12,31 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
 
     private final AuthenticationManager authenticationManager;
+    private final CustomUserDetailsService userDetailsService;
     private final UserService userService;
     private final JwtUtils jwtUtils;
+    private final LogService logService;
+    private final HttpServletRequest request;
 
     public AuthController(AuthenticationManager authenticationManager, 
-                         UserService userService, 
-                         JwtUtils jwtUtils) {
+                         CustomUserDetailsService userDetailsService, 
+                         UserService userService,
+                         JwtUtils jwtUtils,
+                         LogService logService,
+                         HttpServletRequest request) {
         this.authenticationManager = authenticationManager;
+        this.userDetailsService = userDetailsService;
         this.userService = userService;
         this.jwtUtils = jwtUtils;
+        this.logService = logService;
+        this.request = request;
     }
 
     @PostMapping("/login")
@@ -33,11 +45,16 @@ public class AuthController {
             new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
         );
         
-        final UserDetails userDetails = userService.loadUserByUsername(request.getUsername());
+        final UserDetails userDetails = userDetailsService.loadUserByUsername(request.getUsername());
         final String jwt = jwtUtils.generateToken(userDetails);
         
         User user = userService.getUserByUsername(request.getUsername());
         userService.updateLastLoginTime(user.getUserId());
+
+        // Create audit log
+        String details = String.format("User %s logged in successfully", user.getUsername());
+        logService.createLog(user.getUserId(), "USER_LOGIN", details, 
+            this.request.getRemoteAddr().getBytes());
         
         return ResponseEntity.ok(new AuthResponse(jwt, user.getUserId(), user.getRole()));
     }
@@ -49,20 +66,25 @@ public class AuthController {
         user.setPassword(request.getPassword());
         user.setEmail(request.getEmail());
         user.setPhone(request.getPhone());
-        user.setRole("USER");  // Default role for new registrations
+        user.setRole("USER");
         
         User createdUser = userService.createUser(user);
         
-        final UserDetails userDetails = userService.loadUserByUsername(createdUser.getUsername());
+        final UserDetails userDetails = userDetailsService.loadUserByUsername(createdUser.getUsername());
         final String jwt = jwtUtils.generateToken(userDetails);
         
+        // Create audit log
+        String details = String.format("New user registered: %s", createdUser.getUsername());
+        logService.createLog(createdUser.getUserId(), "USER_REGISTER", details, 
+            this.request.getRemoteAddr().getBytes());
+
         return ResponseEntity.ok(new AuthResponse(jwt, createdUser.getUserId(), createdUser.getRole()));
     }
 
     @PostMapping("/validate")
     public ResponseEntity<Boolean> validateToken(@RequestBody TokenValidationRequest request) {
         String username = jwtUtils.extractUsername(request.getToken());
-        UserDetails userDetails = userService.loadUserByUsername(username);
+        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
         
         boolean isValid = jwtUtils.isTokenValid(request.getToken(), userDetails);
         return ResponseEntity.ok(isValid);
@@ -72,7 +94,16 @@ public class AuthController {
     public ResponseEntity<Void> logout(@RequestHeader("Authorization") String authHeader) {
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             String token = authHeader.substring(7);
+            String username = jwtUtils.extractUsername(token);
+            User user = userService.getUserByUsername(username);
+            
             jwtUtils.invalidateToken(token);
+
+            // Create audit log
+            String details = String.format("User %s logged out", username);
+            logService.createLog(user.getUserId(), "USER_LOGOUT", details, 
+                this.request.getRemoteAddr().getBytes());
+
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();

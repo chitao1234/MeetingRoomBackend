@@ -73,29 +73,4 @@ public class NotificationServiceImpl implements NotificationService {
     public void deleteNotification(Long notificationId) {
         notificationMapper.deleteByPrimaryKey(notificationId);
     }
-
-    // Utility method to create different types of notifications
-    public void createSystemNotification(Integer userId, String content) {
-        Notification notification = new Notification();
-        notification.setUserId(userId);
-        notification.setType("SYSTEM");
-        notification.setContent(content);
-        createNotification(notification);
-    }
-
-    public void createReservationNotification(Integer userId, String content) {
-        Notification notification = new Notification();
-        notification.setUserId(userId);
-        notification.setType("RESERVATION");
-        notification.setContent(content);
-        createNotification(notification);
-    }
-
-    public void createMeetingRoomNotification(Integer userId, String content) {
-        Notification notification = new Notification();
-        notification.setUserId(userId);
-        notification.setType("MEETING_ROOM");
-        notification.setContent(content);
-        createNotification(notification);
-    }
 } 

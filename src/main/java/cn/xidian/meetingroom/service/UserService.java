@@ -3,9 +3,7 @@ package cn.xidian.meetingroom.service;
 import cn.xidian.meetingroom.model.User;
 import java.util.List;
 
-import org.springframework.security.core.userdetails.UserDetailsService;
-
-public interface UserService extends UserDetailsService {
+public interface UserService {
     User getUserById(Integer userId);
     User getUserByUsername(String username);
     List<User> getAllUsers();
@@ -13,4 +11,5 @@ public interface UserService extends UserDetailsService {
     User updateUser(Integer userId, User user);
     void deleteUser(Integer userId);
     void updateLastLoginTime(Integer userId);
+    List<User> getAllAdmins();
 } 

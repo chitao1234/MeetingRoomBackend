@@ -2,21 +2,30 @@ package cn.xidian.meetingroom.controller;
 
 import cn.xidian.meetingroom.model.MeetingRoomWithBLOBs;
 import cn.xidian.meetingroom.service.MeetingRoomService;
+import cn.xidian.meetingroom.service.LogService;
+import cn.xidian.meetingroom.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.time.LocalDateTime;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @RestController
 @RequestMapping("/api/meeting-rooms")
-public class MeetingRoomController {
+public class MeetingRoomController extends BaseController {
 
     private final MeetingRoomService meetingRoomService;
+    private final LogService logService;
+    private final HttpServletRequest request;
 
-    public MeetingRoomController(MeetingRoomService meetingRoomService) {
+    public MeetingRoomController(MeetingRoomService meetingRoomService,
+                               LogService logService,
+                               HttpServletRequest request) {
         this.meetingRoomService = meetingRoomService;
+        this.logService = logService;
+        this.request = request;
     }
 
     @GetMapping
@@ -40,6 +49,12 @@ public class MeetingRoomController {
     @PostMapping
     public ResponseEntity<MeetingRoomWithBLOBs> createMeetingRoom(@RequestBody MeetingRoomWithBLOBs meetingRoom) {
         MeetingRoomWithBLOBs createdRoom = meetingRoomService.createMeetingRoom(meetingRoom);
+        
+        // Create audit log
+        String details = String.format("Created new meeting room: %s", createdRoom.getName());
+        logService.createLog(getCurrentUserId(), "CREATE_MEETING_ROOM", details, 
+            request.getRemoteAddr().getBytes());
+
         return ResponseEntity.status(HttpStatus.CREATED).body(createdRoom);
     }
 
@@ -51,11 +66,25 @@ public class MeetingRoomController {
         if (updatedRoom == null) {
             return ResponseEntity.notFound().build();
         }
+
+        // Create audit log
+        String details = String.format("Updated meeting room: %s", updatedRoom.getName());
+        logService.createLog(getCurrentUserId(), "UPDATE_MEETING_ROOM", details, 
+            request.getRemoteAddr().getBytes());
+
         return ResponseEntity.ok(updatedRoom);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteMeetingRoom(@PathVariable("id") Integer meetingRoomId) {
+        MeetingRoomWithBLOBs room = meetingRoomService.getMeetingRoomById(meetingRoomId);
+        if (room != null) {
+            // Create audit log before deletion
+            String details = String.format("Deleted meeting room: %s", room.getName());
+            logService.createLog(getCurrentUserId(), "DELETE_MEETING_ROOM", details, 
+                request.getRemoteAddr().getBytes());
+        }
+
         meetingRoomService.deleteMeetingRoom(meetingRoomId);
         return ResponseEntity.noContent().build();
     }
