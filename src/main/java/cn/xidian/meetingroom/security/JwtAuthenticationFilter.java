@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.lang.NonNull;
 
 import java.io.IOException;
 
@@ -29,14 +30,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, 
-                                  HttpServletResponse response, 
-                                  FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(@NonNull HttpServletRequest request, 
+                                  @NonNull HttpServletResponse response, 
+                                  @NonNull FilterChain filterChain) throws ServletException, IOException {
         try {
             final String authHeader = request.getHeader("Authorization");
             
-            logger.debug("Processing request to: " + request.getRequestURI());
-            logger.debug("Authorization header: " + (authHeader != null ? "present" : "missing"));
+            logger.debug("Processing request to: {}", request.getRequestURI());
+            logger.debug("Authorization header: {}", authHeader != null ? "present" : "missing");
             
             if (authHeader == null || !authHeader.startsWith("Bearer ")) {
                 logger.debug("No valid authorization header found");
@@ -65,10 +66,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     }
                 }
             } catch (io.jsonwebtoken.JwtException e) {
-                logger.error("JWT token validation failed: " + e.getMessage());
+                logger.error("JWT token validation failed: {}", e.getMessage());
             }
         } catch (Exception e) {
-            logger.error("Error processing JWT token: " + e.getMessage());
+            logger.error("Error processing JWT token: {}", e.getMessage());
         }
         
         filterChain.doFilter(request, response);
