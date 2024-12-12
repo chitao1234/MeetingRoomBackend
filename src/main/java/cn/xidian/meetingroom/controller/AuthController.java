@@ -4,6 +4,7 @@ import cn.xidian.meetingroom.model.User;
 import cn.xidian.meetingroom.security.JwtUtils;
 import cn.xidian.meetingroom.service.UserService;
 import lombok.Data;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -38,7 +39,7 @@ public class AuthController {
         User user = userService.getUserByUsername(request.getUsername());
         userService.updateLastLoginTime(user.getUserId());
         
-        return ResponseEntity.ok(new AuthResponse(jwt, user.getUserId()));
+        return ResponseEntity.ok(new AuthResponse(jwt, user.getUserId(), user.getRole()));
     }
 
     @PostMapping("/register")
@@ -55,7 +56,7 @@ public class AuthController {
         final UserDetails userDetails = userService.loadUserByUsername(createdUser.getUsername());
         final String jwt = jwtUtils.generateToken(userDetails);
         
-        return ResponseEntity.ok(new AuthResponse(jwt, createdUser.getUserId()));
+        return ResponseEntity.ok(new AuthResponse(jwt, createdUser.getUserId(), createdUser.getRole()));
     }
 
     @PostMapping("/validate")
@@ -65,6 +66,27 @@ public class AuthController {
         
         boolean isValid = jwtUtils.isTokenValid(request.getToken(), userDetails);
         return ResponseEntity.ok(isValid);
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(@RequestHeader("Authorization") String authHeader) {
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            String token = authHeader.substring(7);
+            jwtUtils.invalidateToken(token);
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    }
+
+    @GetMapping("/check-admin")
+    public ResponseEntity<Boolean> checkAdmin(@RequestHeader("Authorization") String authHeader) {
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            String token = authHeader.substring(7);
+            String username = jwtUtils.extractUsername(token);
+            User user = userService.getUserByUsername(username);
+            return ResponseEntity.ok("ADMIN".equals(user.getRole()));
+        }
+        return ResponseEntity.ok(false);
     }
 }
 
@@ -91,9 +113,11 @@ class TokenValidationRequest {
 class AuthResponse {
     private String token;
     private Integer userId;
+    private String role;
     
-    public AuthResponse(String token, Integer userId) {
+    public AuthResponse(String token, Integer userId, String role) {
         this.token = token;
         this.userId = userId;
+        this.role = role;
     }
 } 

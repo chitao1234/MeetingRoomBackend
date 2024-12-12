@@ -95,4 +95,19 @@ public class ReservationServiceImpl implements ReservationService {
         reservationMapper.updateByPrimaryKeySelective(reservation);
         return reservationMapper.selectByPrimaryKey(reservationId);
     }
+
+    @Override
+    public List<ReservationWithBLOBs> getAllReservations() {
+        ReservationExample example = new ReservationExample();
+        return reservationMapper.selectByExampleWithBLOBs(example);
+    }
+
+    @Override
+    public List<ReservationWithBLOBs> getAllReservationsByTimeRange(LocalDateTime startDateTime, LocalDateTime endDateTime) {
+        ReservationExample example = new ReservationExample();
+        example.createCriteria()
+                .andStartTimeBetween(startDateTime, endDateTime)
+                .andEndTimeBetween(startDateTime, endDateTime);
+        return reservationMapper.selectByExampleWithBLOBs(example);
+    }
 } 

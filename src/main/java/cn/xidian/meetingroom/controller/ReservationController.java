@@ -44,6 +44,16 @@ public class ReservationController {
         return ResponseEntity.ok(reservationService.getReservationsByMeetingRoomId(roomId));
     }
 
+    @GetMapping
+    public ResponseEntity<List<ReservationWithBLOBs>> getAllReservations(
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDateTime,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDateTime) {
+        if (startDateTime != null && endDateTime != null) {
+            return ResponseEntity.ok(reservationService.getAllReservationsByTimeRange(startDateTime, endDateTime));
+        }
+        return ResponseEntity.ok(reservationService.getAllReservations());
+    }
+
     @PostMapping
     public ResponseEntity<ReservationWithBLOBs> createReservation(@RequestBody ReservationWithBLOBs reservation) {
         ReservationWithBLOBs createdReservation = reservationService.createReservation(reservation);

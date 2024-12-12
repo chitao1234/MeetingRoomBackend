@@ -15,4 +15,6 @@ public interface ReservationService {
     void deleteReservation(Long reservationId);
     ReservationWithBLOBs approveReservation(Long reservationId);
     ReservationWithBLOBs rejectReservation(Long reservationId, String rejectionReason);
+    List<ReservationWithBLOBs> getAllReservations();
+    List<ReservationWithBLOBs> getAllReservationsByTimeRange(LocalDateTime startDateTime, LocalDateTime endDateTime);
 } 
