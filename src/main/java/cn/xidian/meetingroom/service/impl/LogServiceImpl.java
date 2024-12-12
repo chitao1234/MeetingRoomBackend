@@ -36,7 +36,12 @@ public class LogServiceImpl implements LogService {
     @Override
     public List<LogWithBLOBs> getLogsByDateRange(LocalDateTime startDate, LocalDateTime endDate) {
         LogExample example = new LogExample();
-        example.createCriteria().andCreatedTimeBetween(startDate, endDate);
+        if (startDate != null) {
+            example.createCriteria().andCreatedTimeGreaterThanOrEqualTo(startDate);
+        }
+        if (endDate != null) {
+            example.createCriteria().andCreatedTimeLessThanOrEqualTo(endDate);
+        }
         return logMapper.selectByExampleWithBLOBs(example);
     }
 
