@@ -119,6 +119,20 @@ public class AuthController {
         }
         return ResponseEntity.ok(false);
     }
+
+    @PostMapping("/password")
+    public ResponseEntity<Boolean> updateUserPassword(@RequestHeader("Authorization") String authHeader, @RequestBody PasswordUpdateRequest request) {
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            String token = authHeader.substring(7);
+            String username = jwtUtils.extractUsername(token);
+            User user = userService.getUserByUsername(username);
+            if (userService.checkPassword(user.getUserId(), request.getOldPassword())) {
+                userService.updateUserPassword(user.getUserId(), request.getNewPassword());
+                return ResponseEntity.ok(true);
+            }
+        }
+        return ResponseEntity.ok(false);
+    }
 }
 
 @Data
@@ -151,4 +165,10 @@ class AuthResponse {
         this.userId = userId;
         this.role = role;
     }
+}
+
+@Data
+class PasswordUpdateRequest {
+    private String oldPassword;
+    private String newPassword;
 }

@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.Data;
+
 import java.util.List;
 
 @RestController
@@ -88,4 +90,10 @@ public class UserController extends BaseController {
         userService.deleteUser(userId);
         return ResponseEntity.noContent().build();
     }
-} 
+
+    @PutMapping("/{id}/password")
+    public ResponseEntity<Void> updateUserPassword(@PathVariable("id") Integer userId, @RequestBody String newPassword) {
+        userService.updateUserPassword(userId, newPassword);
+        return ResponseEntity.noContent().build();
+    }
+}

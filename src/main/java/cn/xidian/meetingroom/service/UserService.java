@@ -12,4 +12,6 @@ public interface UserService {
     void deleteUser(Integer userId);
     void updateLastLoginTime(Integer userId);
     List<User> getAllAdmins();
+    void updateUserPassword(Integer userId, String newPassword);
+    Boolean checkPassword(Integer userId, String password);
 } 

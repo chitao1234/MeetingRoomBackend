@@ -95,4 +95,21 @@ public class UserServiceImpl implements UserService {
         example.createCriteria().andRoleEqualTo("ADMIN");
         return userMapper.selectByExample(example);
     }
+
+    @Override
+    public void updateUserPassword(Integer userId, String newPassword) {
+        User user = new User();
+        user.setUserId(userId);
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userMapper.updateByPrimaryKeySelective(user);
+    }
+
+    @Override
+    public Boolean checkPassword(Integer userId, String password) {
+        User user = userMapper.selectByPrimaryKey(userId);
+        if (user == null) {
+            return false;
+        }
+        return passwordEncoder.matches(password, user.getPassword());
+    }
 } 
