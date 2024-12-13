@@ -8,6 +8,7 @@ import cn.xidian.meetingroom.model.Reservation;
 import cn.xidian.meetingroom.model.ReservationExample;
 import cn.xidian.meetingroom.service.MeetingRoomService;
 
+import java.util.Arrays;
 import java.util.List;
 import java.time.LocalDateTime;
 
@@ -89,17 +90,12 @@ public class MeetingRoomServiceImpl implements MeetingRoomService {
                     }
 
                     ReservationExample example = new ReservationExample();
-                    if (endTime != null) {
+                    if (endTime != null && startTime != null) {
                         ReservationExample.Criteria criteria1 = example.or();
                         criteria1.andMeetingRoomIdEqualTo(room.getMeetingRoomId())
+                                .andStatusNotIn(Arrays.asList("REJECTED", "CANCELLED"))
                                 .andStartTimeLessThan(endTime)
                                 .andEndTimeGreaterThan(startTime);
-                    }
-                    if (startTime != null) {
-                        ReservationExample.Criteria criteria2 = example.or();
-                        criteria2.andMeetingRoomIdEqualTo(room.getMeetingRoomId())
-                                .andEndTimeGreaterThan(startTime)
-                                .andStartTimeLessThan(endTime);
                     }
 
                     List<Reservation> conflictingReservations = reservationMapper.selectByExample(example);
