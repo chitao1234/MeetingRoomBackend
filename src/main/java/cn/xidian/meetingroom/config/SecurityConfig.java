@@ -73,13 +73,12 @@ public class SecurityConfig {
                 .requestMatchers("/api/auth/**").permitAll()
                 .requestMatchers("/api/meeting-rooms/**").hasAnyRole("USER", "ADMIN")
                 .requestMatchers("/api/reservations/**").hasAnyRole("USER", "ADMIN")
-                .requestMatchers("/api/users/**").permitAll()
+                .requestMatchers("/api/users/**").hasAnyRole("USER", "ADMIN")
+                .requestMatchers("/api/notification/**").hasAnyRole("USER", "ADMIN")
                 .requestMatchers("/error").permitAll()
                 .anyRequest().authenticated()
             )
-            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-            .headers()
-                .contentSecurityPolicy("img-src 'self'; object-src 'none';");
+            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

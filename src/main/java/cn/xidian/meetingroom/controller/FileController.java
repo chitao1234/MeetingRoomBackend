@@ -3,7 +3,6 @@ package cn.xidian.meetingroom.controller;
 import cn.xidian.meetingroom.service.LogService;
 import cn.xidian.meetingroom.util.IpUtil;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +23,6 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/files")
@@ -131,7 +129,11 @@ public class FileController extends BaseController {
             return "Invalid file type. Only JPEG, PNG, GIF and WebP images are allowed";
         }
 
-        String filename = StringUtils.cleanPath(file.getOriginalFilename());
+        String filename = file.getOriginalFilename();
+        if (filename == null) {
+            return null;
+        }
+        filename = StringUtils.cleanPath(filename);
         if (filename.contains("..")) {
             return "Invalid file path sequence";
         }

@@ -6,6 +6,8 @@ import cn.xidian.meetingroom.model.ReservationExample;
 import cn.xidian.meetingroom.model.ReservationWithBLOBs;
 import cn.xidian.meetingroom.service.ReservationService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 import java.time.LocalDateTime;
 
@@ -48,7 +50,11 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
+    @Transactional
     public ReservationWithBLOBs createReservation(ReservationWithBLOBs reservation) {
+        if (getReservationsByTimeRange(reservation.getMeetingRoomId(), reservation.getStartTime(), reservation.getEndTime()).size() > 0) {
+            return null;
+        }
         reservation.setStatus("PENDING");
         reservation.setCreatedTime(LocalDateTime.now());
         reservationMapper.insertSelective(reservation);

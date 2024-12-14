@@ -3,6 +3,7 @@ package cn.xidian.meetingroom.controller;
 import cn.xidian.meetingroom.model.ReservationWithBLOBs;
 import cn.xidian.meetingroom.service.ReservationService;
 import cn.xidian.meetingroom.service.NotificationService;
+import cn.xidian.meetingroom.service.MeetingRoomService;
 import cn.xidian.meetingroom.model.Notification;
 import cn.xidian.meetingroom.model.User;
 import cn.xidian.meetingroom.service.UserService;
@@ -28,17 +29,20 @@ public class ReservationController extends BaseController {
     private final NotificationService notificationService;
     private final UserService userService;
     private final LogService logService;
+    private final MeetingRoomService meetingRoomService;
     private final HttpServletRequest request;
 
     public ReservationController(ReservationService reservationService, 
                                NotificationService notificationService,
                                UserService userService,
                                LogService logService,
+                               MeetingRoomService meetingRoomService,
                                HttpServletRequest request) {
         this.reservationService = reservationService;
         this.notificationService = notificationService;
         this.userService = userService;
         this.logService = logService;
+        this.meetingRoomService = meetingRoomService;
         this.request = request;
     }
 
@@ -82,6 +86,14 @@ public class ReservationController extends BaseController {
         Integer currentUserId = getCurrentUserId();
         logger.info("User {} creating reservation for room {}", currentUserId, reservation.getMeetingRoomId());
         
+        if (reservation.getStartTime().isAfter(reservation.getEndTime())) {
+            return ResponseEntity.badRequest().body(null);
+        }
+
+        if (meetingRoomService.getMeetingRoomById(reservation.getMeetingRoomId()).getCapacity() < reservation.getParticipantCount()) {
+            return ResponseEntity.badRequest().body(null);
+        }
+
         ReservationWithBLOBs createdReservation = reservationService.createReservation(reservation);
         
         // Create notification for all admins about new reservation

@@ -3,7 +3,6 @@ package cn.xidian.meetingroom.controller;
 import cn.xidian.meetingroom.model.MeetingRoomWithBLOBs;
 import cn.xidian.meetingroom.service.MeetingRoomService;
 import cn.xidian.meetingroom.service.LogService;
-import cn.xidian.meetingroom.service.UserService;
 import cn.xidian.meetingroom.util.IpUtil;
 
 import org.springframework.http.HttpStatus;
